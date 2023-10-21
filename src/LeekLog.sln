@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34202.233
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeekLog", "LeekLog\LeekLog.csproj", "{B0C9454D-2947-4EA2-8F25-0DA76B1DCCE0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LeekLog", "LeekLog\LeekLog.csproj", "{B0C9454D-2947-4EA2-8F25-0DA76B1DCCE0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeekLog.Abstractions", "LeekLog.Abstractions\LeekLog.Abstractions.csproj", "{0FD4B7D8-5BFC-4094-9E69-5813B2483402}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeekLog.Data", "LeekLog.Data\LeekLog.Data.csproj", "{4C24C344-7B0C-4B30-B3AD-B869CE6A68A2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{B0C9454D-2947-4EA2-8F25-0DA76B1DCCE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B0C9454D-2947-4EA2-8F25-0DA76B1DCCE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B0C9454D-2947-4EA2-8F25-0DA76B1DCCE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0FD4B7D8-5BFC-4094-9E69-5813B2483402}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0FD4B7D8-5BFC-4094-9E69-5813B2483402}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0FD4B7D8-5BFC-4094-9E69-5813B2483402}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0FD4B7D8-5BFC-4094-9E69-5813B2483402}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C24C344-7B0C-4B30-B3AD-B869CE6A68A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C24C344-7B0C-4B30-B3AD-B869CE6A68A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C24C344-7B0C-4B30-B3AD-B869CE6A68A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C24C344-7B0C-4B30-B3AD-B869CE6A68A2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
