@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  leeklog-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    depends_on:
+      - mysql-db
+    environment:
+      - ConnectionStrings__DefaultConnection=Server=mysql-db;Port=3306;Database=leeklog;User=root;Password=TestPassword123!
+
+  mysql-db:
+    image: mysql:latest
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: TestPassword123!
+      MYSQL_DATABASE: leeklog
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+volumes:
+  mysql-data: {}
