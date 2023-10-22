@@ -29,6 +29,11 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+using (IServiceScope scope = app.Services.CreateScope())
+{
+    await scope.ServiceProvider.GetRequiredService<LeekLogDbContext>().Database.MigrateAsync();
+}
+
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
