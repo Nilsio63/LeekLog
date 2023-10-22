@@ -1,4 +1,5 @@
 using LeekLog.Data;
+using LeekLog.Data.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -14,6 +15,7 @@ if (string.IsNullOrWhiteSpace(connectionString))
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
+builder.Services.AddTransient<IDbMigrator, DbMigrator>();
 builder.Services.AddDbContext<LeekLogDbContext>(o =>
 {
     o.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
@@ -29,10 +31,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-using (IServiceScope scope = app.Services.CreateScope())
-{
-    await scope.ServiceProvider.GetRequiredService<LeekLogDbContext>().Database.MigrateAsync();
-}
+await app.UseDatabaseAsync();
 
 app.UseHttpsRedirection();
 
