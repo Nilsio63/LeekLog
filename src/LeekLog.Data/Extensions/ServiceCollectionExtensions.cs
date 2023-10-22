@@ -7,7 +7,7 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddDbServices(this IServiceCollection services, Action<DbContextOptionsBuilder> buildOptions)
     {
-        services.AddDbContext<LeekLogDbContext>(o =>
+        services.AddDbContextFactory<LeekLogDbContext>(o =>
         {
             buildOptions.Invoke(o);
         });
