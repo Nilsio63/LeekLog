@@ -3,7 +3,8 @@ FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build-env
 WORKDIR /app
 
 # Copy the remaining application code and build the app
-COPY ./src/LeekLog/ ./
+COPY ./src/ ./
+RUN cd ./LeekLog/
 RUN dotnet restore
 RUN dotnet publish -c Release -o out
 

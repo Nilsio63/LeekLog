@@ -10,7 +10,7 @@ services:
     depends_on:
       - mysql-db
     environment:
-      - ConnectionStrings__DefaultConnection=Server=mysql-db;Port=3306;Database=leeklog;User=root;Password=TestPassword123!
+      - ConnectionStrings__Default=Server=mysql-db;Port=3306;Database=leeklog;User=root;Password=TestPassword123!
 
   mysql-db:
     image: mysql:latest
