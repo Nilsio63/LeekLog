@@ -15,8 +15,8 @@ if (string.IsNullOrWhiteSpace(connectionString))
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
-builder.Services.AddTransient<IDbMigrator, DbMigrator>();
-builder.Services.AddDbContext<LeekLogDbContext>(o =>
+
+builder.Services.AddDbServices(o =>
 {
     o.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 });
