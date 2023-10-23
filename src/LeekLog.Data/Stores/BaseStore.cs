@@ -6,7 +6,7 @@ namespace LeekLog.Data.Stores;
 public interface IBaseStore<T>
     where T : BaseEntity
 {
-    Task<T?> LoadByIdAsync(string id, CancellationToken ct = default);
+    Task<T?> GetByIdAsync(string id, CancellationToken ct = default);
     Task SaveAsync(T entity, CancellationToken ct = default);
 }
 
@@ -19,9 +19,12 @@ public abstract class BaseStore<T> : IBaseStore<T> where T : BaseEntity
         _dbContextFactory = dbContextFactory;
     }
 
-    public async Task<T?> LoadByIdAsync(string id, CancellationToken ct = default)
+    public async Task<T?> GetByIdAsync(string id, CancellationToken ct = default)
     {
-        Guid guid = Guid.Parse(id);
+        if (Guid.TryParse(id, out Guid guid) == false)
+        {
+            return null;
+        }
 
         using LeekLogDbContext context = await _dbContextFactory.CreateDbContextAsync(ct);
 

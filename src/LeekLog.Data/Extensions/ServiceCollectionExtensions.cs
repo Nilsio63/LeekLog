@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using LeekLog.Data.Stores;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace LeekLog.Data.Extensions;
@@ -13,6 +14,7 @@ public static class ServiceCollectionExtensions
         });
 
         services.AddTransient<IDbMigrator, DbMigrator>();
+        services.AddTransient<IUserStore, UserStore>();
 
         return services;
     }
