@@ -1,5 +1,8 @@
+using Blazored.LocalStorage;
+using LeekLog.Authentication;
 using LeekLog.Data;
 using LeekLog.Data.Extensions;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -14,12 +17,18 @@ if (string.IsNullOrWhiteSpace(connectionString))
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
+builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddSingleton<WeatherForecastService>();
 
 builder.Services.AddDbServices(o =>
 {
     o.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 });
+
+builder.Services.AddScoped<IUserAuthService, UserAuthService>();
+builder.Services.AddScoped<LeekLogAuthenticationStateProvider>();
+builder.Services.AddScoped<ILeekLogAuthenticationStateProvider>(s => s.GetRequiredService<LeekLogAuthenticationStateProvider>());
+builder.Services.AddScoped<AuthenticationStateProvider>(s => s.GetRequiredService<LeekLogAuthenticationStateProvider>());
 
 WebApplication app = builder.Build();
 
