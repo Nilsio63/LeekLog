@@ -9,5 +9,7 @@ public class UserConfiguration : BaseConfiguration<UserEntity>
     protected override void ConfigureEntity(EntityTypeBuilder<UserEntity> builder)
     {
         builder.ToTable("Users");
+
+        builder.Property(o => o.Password).HasMaxLength(32);
     }
 }

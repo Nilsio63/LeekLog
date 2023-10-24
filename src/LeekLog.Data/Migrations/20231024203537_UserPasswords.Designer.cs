@@ -3,6 +3,7 @@ using System;
 using LeekLog.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LeekLog.Data.Migrations
 {
     [DbContext(typeof(LeekLogDbContext))]
-    partial class LeekLogDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231024203537_UserPasswords")]
+    partial class UserPasswords
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
