@@ -1,5 +1,4 @@
 using Blazored.LocalStorage;
-using LeekLog.Data;
 using LeekLog.Data.Extensions;
 using LeekLog.Extensions;
 using Microsoft.EntityFrameworkCore;
@@ -17,7 +16,6 @@ if (string.IsNullOrWhiteSpace(connectionString))
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddBlazoredLocalStorage();
-builder.Services.AddSingleton<WeatherForecastService>();
 
 builder.Services
     .AddDbServices(o =>
