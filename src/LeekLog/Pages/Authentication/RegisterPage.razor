@@ -2,9 +2,11 @@
 @using LeekLog.Abstractions.Entites;
 @using LeekLog.Authentication;
 @using LeekLog.Data.Abstractions.Stores;
+@using LeekLog.Services.Abstractions;
 @inject NavigationManager _navManager
 @inject IUserAuthService _userAuthService
 @inject IUserStore _userStore
+@inject IUserService _userService
 
 <h1>Sign up</h1>
 
@@ -61,9 +63,14 @@
             return;
         }
 
-        UserEntity user = new UserEntity() { UserName = UserName };
+        UserEntity? user = await _userService.TrySaveUserAsync(UserName, Password);
 
-        await _userStore.SaveAsync(user);
+        if (user is null)
+        {
+            ErrorMessage = "User could not be created";
+
+            return;
+        }
 
         await _userAuthService.LoginAsync(user);
 

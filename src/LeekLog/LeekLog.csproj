@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LeekLog.Data\LeekLog.Data.csproj" />
+    <ProjectReference Include="..\LeekLog.Services\LeekLog.Services.csproj" />
   </ItemGroup>
 
 </Project>

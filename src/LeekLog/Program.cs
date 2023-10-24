@@ -1,6 +1,7 @@
 using Blazored.LocalStorage;
 using LeekLog.Data.Extensions;
 using LeekLog.Extensions;
+using LeekLog.Services.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -22,6 +23,7 @@ builder.Services
     {
         o.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
     })
+    .AddDomainServices()
     .AddApiServices();
 
 WebApplication app = builder.Build();
