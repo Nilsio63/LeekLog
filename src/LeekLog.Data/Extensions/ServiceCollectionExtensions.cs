@@ -1,4 +1,5 @@
-﻿using LeekLog.Data.Stores;
+﻿using LeekLog.Data.Abstractions.Stores;
+using LeekLog.Data.Stores;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 

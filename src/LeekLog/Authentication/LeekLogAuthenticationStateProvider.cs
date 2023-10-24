@@ -1,6 +1,6 @@
 ﻿using Blazored.LocalStorage;
 using LeekLog.Abstractions.Entites;
-using LeekLog.Data.Stores;
+using LeekLog.Data.Abstractions.Stores;
 using Microsoft.AspNetCore.Components.Authorization;
 using System.Security.Claims;
 

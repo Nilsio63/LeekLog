@@ -1,12 +1,8 @@
 ﻿using LeekLog.Abstractions.Entites;
+using LeekLog.Data.Abstractions.Stores;
 using Microsoft.EntityFrameworkCore;
 
 namespace LeekLog.Data.Stores;
-
-public interface IUserStore : IBaseStore<UserEntity>
-{
-    Task<UserEntity?> GetByLoginAsync(string login, CancellationToken ct = default);
-}
 
 public class UserStore : BaseStore<UserEntity>, IUserStore
 {

@@ -1,14 +1,8 @@
 ﻿using LeekLog.Abstractions.Entites;
+using LeekLog.Data.Abstractions.Stores;
 using Microsoft.EntityFrameworkCore;
 
 namespace LeekLog.Data.Stores;
-
-public interface IBaseStore<T>
-    where T : BaseEntity
-{
-    Task<T?> GetByIdAsync(string id, CancellationToken ct = default);
-    Task SaveAsync(T entity, CancellationToken ct = default);
-}
 
 public abstract class BaseStore<T> : IBaseStore<T> where T : BaseEntity
 {

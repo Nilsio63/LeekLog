@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LeekLog.Abstractions\LeekLog.Abstractions.csproj" />
+    <ProjectReference Include="..\LeekLog.Data.Abstractions\LeekLog.Data.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>
