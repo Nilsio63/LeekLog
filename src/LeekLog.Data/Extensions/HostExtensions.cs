@@ -12,5 +12,9 @@ public static class HostExtensions
         IDbMigrator dbMigrator = scope.ServiceProvider.GetRequiredService<IDbMigrator>();
 
         await dbMigrator.MigrateAsync();
+
+        IMetaDataInitializer metaDataInitializer = scope.ServiceProvider.GetRequiredService<IMetaDataInitializer>();
+
+        await metaDataInitializer.InitMetaDataAsync();
     }
 }

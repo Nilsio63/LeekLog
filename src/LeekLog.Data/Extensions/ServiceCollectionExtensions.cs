@@ -15,7 +15,9 @@ public static class ServiceCollectionExtensions
         });
 
         services.AddTransient<IDbMigrator, DbMigrator>();
+        services.AddTransient<IMetaDataInitializer, MetaDataInitializer>();
         services.AddTransient<IUserStore, UserStore>();
+        services.AddTransient<IExerciseStore, ExerciseStore>();
 
         return services;
     }
