@@ -8,7 +8,8 @@ services:
     ports:
       - "8080:80"
     depends_on:
-      - mysql-db
+      mysql-db:
+        condition: service_healthy
     environment:
       - ConnectionStrings__Default=Server=mysql-db;Port=3306;Database=leeklog;User=root;Password=TestPassword123!
 
@@ -19,6 +20,10 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: TestPassword123!
       MYSQL_DATABASE: leeklog
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 10s
+      retries: 10
     volumes:
       - mysql-data:/var/lib/mysql
 
