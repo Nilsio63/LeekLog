@@ -14,5 +14,8 @@ public class GymSessionConfiguration : BaseConfiguration<GymSessionEntity>
             .WithMany()
             .HasForeignKey(o => o.UserId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasIndex(o => new { o.UserId, o.Date }).IsUnique();
+        builder.HasIndex(o => o.UserId);
     }
 }

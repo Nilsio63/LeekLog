@@ -19,5 +19,9 @@ public class SessionExerciseConfiguration : BaseConfiguration<SessionExerciseEnt
             .WithMany()
             .HasForeignKey(o => o.ExerciseId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasIndex(o => new { o.SessionId, o.Order }).IsUnique();
+        builder.HasIndex(o => o.SessionId);
+        builder.HasIndex(o => o.ExerciseId);
     }
 }

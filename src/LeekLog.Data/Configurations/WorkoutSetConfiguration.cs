@@ -14,5 +14,8 @@ public class WorkoutSetConfiguration : BaseConfiguration<WorkoutSetEntity>
             .WithMany(o => o.Sets)
             .HasForeignKey(o => o.SessionExerciseId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasIndex(o => new { o.SessionExerciseId, o.Order }).IsUnique();
+        builder.HasIndex(o => o.SessionExerciseId);
     }
 }

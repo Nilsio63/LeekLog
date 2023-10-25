@@ -11,5 +11,7 @@ public class UserConfiguration : BaseConfiguration<UserEntity>
         builder.ToTable("Users");
 
         builder.Property(o => o.Password).HasMaxLength(32);
+
+        builder.HasIndex(o => o.UserName).IsUnique();
     }
 }
