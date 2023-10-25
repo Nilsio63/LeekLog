@@ -1,4 +1,5 @@
 ﻿using LeekLog.Abstractions.Entites;
+using LeekLog.Abstractions.Models;
 using LeekLog.Data.Abstractions.Stores;
 using LeekLog.Services.Abstractions;
 using LeekLog.Services.Security;
@@ -18,18 +19,23 @@ public class UserService : IUserService
         _passwordEncoder = passwordEncoder;
     }
 
-    public async Task<UserEntity?> TrySaveUserAsync(string userName, string password, CancellationToken ct = default)
+    public async Task<UserCreationResult> TrySaveUserAsync(string userName, string password, CancellationToken ct = default)
     {
-        UserEntity? existingUser = await _userStore.GetByLoginAsync(userName, ct);
-
-        if (existingUser is not null)
+        if (string.IsNullOrWhiteSpace(userName))
         {
-            return null;
+            return new UserCreationResult("Username is required");
         }
 
         if (string.IsNullOrWhiteSpace(password))
         {
-            return null;
+            return new UserCreationResult("Password is required");
+        }
+
+        UserEntity? existingUser = await _userStore.GetByLoginAsync(userName, ct);
+
+        if (existingUser is not null)
+        {
+            return new UserCreationResult($"User {existingUser.UserName} already exists");
         }
 
         byte[] encodedPassword = _passwordEncoder.EncodePassword(password);
@@ -42,6 +48,6 @@ public class UserService : IUserService
 
         await _userStore.SaveAsync(newUser, ct);
 
-        return newUser;
+        return new UserCreationResult(newUser);
     }
 }

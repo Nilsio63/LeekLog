@@ -1,5 +1,6 @@
 ﻿@page "/register"
 @using LeekLog.Abstractions.Entites;
+@using LeekLog.Abstractions.Models;
 @using LeekLog.Authentication;
 @using LeekLog.Data.Abstractions.Stores;
 @using LeekLog.Services.Abstractions;
@@ -63,16 +64,16 @@
             return;
         }
 
-        UserEntity? user = await _userService.TrySaveUserAsync(UserName, Password);
+        UserCreationResult result = await _userService.TrySaveUserAsync(UserName, Password);
 
-        if (user is null)
+        if (result.Success == false)
         {
-            ErrorMessage = "User could not be created";
+            ErrorMessage = result.ErrorMessage;
 
             return;
         }
 
-        await _userAuthService.LoginAsync(user);
+        await _userAuthService.LoginAsync(result.CreatedUser);
 
         _navManager.NavigateTo("/");
     }

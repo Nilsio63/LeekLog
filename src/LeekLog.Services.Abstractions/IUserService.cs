@@ -1,8 +1,8 @@
-﻿using LeekLog.Abstractions.Entites;
+﻿using LeekLog.Abstractions.Models;
 
 namespace LeekLog.Services.Abstractions;
 
 public interface IUserService
 {
-    Task<UserEntity?> TrySaveUserAsync(string userName, string password, CancellationToken ct = default);
+    Task<UserCreationResult> TrySaveUserAsync(string userName, string password, CancellationToken ct = default);
 }
