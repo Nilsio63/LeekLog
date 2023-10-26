@@ -23,7 +23,7 @@ builder.Services
     {
         o.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
     })
-    .AddDomainServices()
+    .AddDomainServices(builder.Configuration.GetSection("LeekLog"))
     .AddApiServices();
 
 WebApplication app = builder.Build();
