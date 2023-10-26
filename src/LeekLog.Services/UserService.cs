@@ -19,6 +19,16 @@ public class UserService : IUserService
         _passwordEncoder = passwordEncoder;
     }
 
+    public async Task<UserEntity?> GetByIdAsync(string userId, CancellationToken ct = default)
+    {
+        return await _userStore.GetByIdAsync(userId, ct);
+    }
+
+    public async Task<UserEntity?> GetByLoginAsync(string userName, CancellationToken ct = default)
+    {
+        return await _userStore.GetByLoginAsync(userName, ct);
+    }
+
     public async Task<UserCreationResult> TrySaveUserAsync(string userName, string password, CancellationToken ct = default)
     {
         if (string.IsNullOrWhiteSpace(userName))
