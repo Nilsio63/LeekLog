@@ -1,7 +1,7 @@
 ﻿using Blazored.LocalStorage;
 using LeekLog.Abstractions.Entites;
+using LeekLog.Abstractions.Models;
 using LeekLog.Services.Abstractions;
-using LeekLog.Services.Security;
 
 namespace LeekLog.Authentication;
 
@@ -19,18 +19,15 @@ public class UserAuthService : IUserAuthService
     private readonly ILocalStorageService _localStorageService;
     private readonly ILeekLogAuthenticationStateProvider _authStateProvider;
     private readonly IUserService _userService;
-    private readonly IPasswordEncoder _passwordEncoder;
 
     public UserAuthService(
         ILocalStorageService localStorageService,
         ILeekLogAuthenticationStateProvider authStateProvider,
-        IUserService userService,
-        IPasswordEncoder passwordEncoder)
+        IUserService userService)
     {
         _localStorageService = localStorageService;
         _authStateProvider = authStateProvider;
         _userService = userService;
-        _passwordEncoder = passwordEncoder;
     }
 
     public async Task<bool> IsUserLoggedInAsync(CancellationToken ct = default)
@@ -56,30 +53,14 @@ public class UserAuthService : IUserAuthService
 
     public async Task<string?> TryLoginAsync(string userName, string password, CancellationToken ct = default)
     {
-        if (string.IsNullOrWhiteSpace(userName))
+        UserLoginResult result = await _userService.TryGetByLoginAsync(userName, password, ct);
+
+        if (result.Success == false)
         {
-            return "User name is required";
-        }
-        else if (string.IsNullOrWhiteSpace(password))
-        {
-            return "Password is required";
+            return result.ErrorMessage;
         }
 
-        UserEntity? user = await _userService.GetByLoginAsync(userName, ct);
-
-        if (user == null)
-        {
-            return $"User name {userName} does not exist";
-        }
-
-        byte[] passwordHash = _passwordEncoder.EncodePassword(password);
-
-        if (passwordHash.SequenceEqual(user.Password) == false)
-        {
-            return "Wrong password";
-        }
-
-        await LoginAsync(user, ct);
+        await LoginAsync(result.User, ct);
 
         return null;
     }

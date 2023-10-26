@@ -29,6 +29,34 @@ public class UserService : IUserService
         return await _userStore.GetByLoginAsync(userName, ct);
     }
 
+    public async Task<UserLoginResult> TryGetByLoginAsync(string userName, string password, CancellationToken ct = default)
+    {
+        if (string.IsNullOrWhiteSpace(userName))
+        {
+            return new UserLoginResult("User name is required");
+        }
+        else if (string.IsNullOrWhiteSpace(password))
+        {
+            return new UserLoginResult("Password is required");
+        }
+
+        UserEntity? user = await GetByLoginAsync(userName, ct);
+
+        if (user == null)
+        {
+            return new UserLoginResult($"User name {userName} does not exist");
+        }
+
+        byte[] passwordHash = _passwordEncoder.EncodePassword(password);
+
+        if (passwordHash.SequenceEqual(user.Password) == false)
+        {
+            return new UserLoginResult("Wrong password");
+        }
+
+        return new UserLoginResult(user);
+    }
+
     public async Task<UserCreationResult> TrySaveUserAsync(string userName, string password, CancellationToken ct = default)
     {
         if (string.IsNullOrWhiteSpace(userName))
