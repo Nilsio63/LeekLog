@@ -23,6 +23,10 @@ public class GymSessionStore : BaseStore<GymSessionEntity>, IGymSessionStore
         return await dbContext
             .Set<GymSessionEntity>()
             .Where(o => o.UserId == userGuid)
+            .Include(o => o.Exercises)
+                .ThenInclude(o => o.Exercise)
+            .Include(o => o.Exercises)
+                .ThenInclude(o => o.Sets)
             .ToListAsync(ct);
     }
 }

@@ -15,7 +15,7 @@ public class SessionExerciseConfiguration : BaseConfiguration<SessionExerciseEnt
             .HasForeignKey(o => o.SessionId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder.HasOne<ExerciseEntity>()
+        builder.HasOne(o => o.Exercise)
             .WithMany()
             .HasForeignKey(o => o.ExerciseId)
             .OnDelete(DeleteBehavior.Restrict);

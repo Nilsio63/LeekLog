@@ -1,0 +1,49 @@
+﻿@page "/sessions"
+@using LeekLog.Abstractions.Entites;
+@using LeekLog.Authentication;
+@using LeekLog.Services.Abstractions;
+@inject IUserAuthService _userAuthService
+@inject IGymSessionService _gymSessionService
+@inject NavigationManager _navManager
+
+<h1>My gym sessions</h1>
+
+@if (User is not null)
+{
+    <p>Hey @User.UserName, here are your workouts.</p>
+
+    foreach (GymSessionEntity session in Sessions.OrderByDescending(o => o.Date))
+    {
+        <div class="card">
+            <div class="card-header">@session.Date.ToString("d")</div>
+
+            <div class="card-body">
+                @foreach (SessionExerciseEntity exercise in session.Exercises.OrderBy(o => o.Order))
+                {
+                    <label>@exercise.Exercise.Title: @exercise.Sets.Count Sets</label><br />
+                }
+            </div>
+        </div>
+    }
+}
+
+@code {
+    public UserEntity? User { get; set; }
+    public List<GymSessionEntity> Sessions { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        UserEntity? currentUser = await _userAuthService.GetCurrentUserAsync();
+
+        if (currentUser is null)
+        {
+            _navManager.NavigateTo("/");
+
+            return;
+        }
+
+        User = currentUser;
+
+        Sessions = await _gymSessionService.GetAllByUserIdAsync(User.Id.ToString());
+    }
+}
