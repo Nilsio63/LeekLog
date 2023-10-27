@@ -9,4 +9,6 @@ public interface IBaseStore<T>
     Task<T?> GetByIdAsync(string id, CancellationToken ct = default);
     Task SaveAsync(T entity, CancellationToken ct = default);
     Task SaveAllAsync(IEnumerable<T> entities, CancellationToken ct = default);
+    Task DeleteAsync(T entity, CancellationToken ct = default);
+    Task DeleteAllAsync(IEnumerable<T> entities, CancellationToken ct = default);
 }

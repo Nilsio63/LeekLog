@@ -9,11 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LeekLog.Abstractions", "Lee
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LeekLog.Data", "LeekLog.Data\LeekLog.Data.csproj", "{4C24C344-7B0C-4B30-B3AD-B869CE6A68A2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeekLog.Data.Abstractions", "LeekLog.Data.Abstractions\LeekLog.Data.Abstractions.csproj", "{B9C14405-8713-4D5C-BC00-62C66ED4B306}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LeekLog.Data.Abstractions", "LeekLog.Data.Abstractions\LeekLog.Data.Abstractions.csproj", "{B9C14405-8713-4D5C-BC00-62C66ED4B306}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeekLog.Services", "LeekLog.Services\LeekLog.Services.csproj", "{D190C720-6A34-4E35-9C94-2D04C04B76BF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LeekLog.Services", "LeekLog.Services\LeekLog.Services.csproj", "{D190C720-6A34-4E35-9C94-2D04C04B76BF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeekLog.Services.Abstractions", "LeekLog.Services.Abstractions\LeekLog.Services.Abstractions.csproj", "{117427DD-2D40-473F-B6C2-7B137543A698}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LeekLog.Services.Abstractions", "LeekLog.Services.Abstractions\LeekLog.Services.Abstractions.csproj", "{117427DD-2D40-473F-B6C2-7B137543A698}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -18,6 +18,7 @@ public static class ServiceCollectionExtensions
         services.AddTransient<IMetaDataInitializer, MetaDataInitializer>();
         services.AddTransient<IUserStore, UserStore>();
         services.AddTransient<IExerciseStore, ExerciseStore>();
+        services.AddTransient<IGymSessionStore, GymSessionStore>();
 
         return services;
     }

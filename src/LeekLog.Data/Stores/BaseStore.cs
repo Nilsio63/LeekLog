@@ -65,4 +65,25 @@ public abstract class BaseStore<T> : IBaseStore<T> where T : BaseEntity
 
         await context.SaveChangesAsync(ct);
     }
+
+    public async Task DeleteAsync(T entity, CancellationToken ct = default)
+    {
+        await DeleteAllAsync(new[] { entity }, ct);
+    }
+
+    public async Task DeleteAllAsync(IEnumerable<T> entities, CancellationToken ct = default)
+    {
+        entities = entities.ToArray();
+
+        if (entities.Any() == false)
+        {
+            return;
+        }
+
+        using LeekLogDbContext context = await _dbContextFactory.CreateDbContextAsync(ct);
+
+        context.RemoveRange(entities);
+
+        await context.SaveChangesAsync(ct);
+    }
 }
