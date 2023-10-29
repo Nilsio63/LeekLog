@@ -3,43 +3,44 @@
 @inject IUserAuthService _userAuthService
 @inject NavigationManager _navManager
 
-<h1>Login</h1>
+<PageTitle>Login</PageTitle>
 
-<div class="text-left">
+<MudText Typo="Typo.h3">Login</MudText>
+
+<MudGrid>
     <AuthorizeView>
         <Authorized>
-            <p>
-                You are already logged in!<br />
-                What are you doing here?
-            </p>
+            <MudItem>
+                <MudAlert Severity="Severity.Warning">You are already logged in!<br />What are you doing here?</MudAlert>
+            </MudItem>
         </Authorized>
         <NotAuthorized>
-            <p>
-                Use your user name and password to login!<br />
-                If you forgot your user name or password, well ... that's not really my problem, isn't it?
-            </p>
+            <MudItem xs="12">
+                <MudText Typo="Typo.subtitle1">
+                    Use your user name and password to login!<br />
+                    If you forgot your user name or password, well ... that's not really my problem, isn't it?
+                </MudText>
+            </MudItem>
 
-            <div class="form-container">
-                <EditForm Model="this" Context="auth" OnSubmit="@LoginAsync">
-                    <label for="userName">User name:</label>
-                    <InputText id="userName" @bind-Value="UserName" /><br />
-
-                    <label for="password">Password:</label>
-                    <InputText id="password" type="password" @bind-Value="Password" /><br />
-
-                    <input type="submit" value="Login" />
-                </EditForm>
-            </div>
+            <MudItem xs="12">
+                <MudPaper Class="pa-4">
+                    <MudForm Model="this">
+                        <MudTextField T="string" Label="User name" Required="true" @bind-Value="UserName" />
+                        <MudTextField T="string" Label="Password" InputType="InputType.Password" Required="true" @bind-Value="Password" />
+                        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="LoginAsync">Login</MudButton>
+                    </MudForm>
+                </MudPaper>
+            </MudItem>
 
             @if (!string.IsNullOrWhiteSpace(_errorMessage))
             {
-                <br />
-
-                <span class="text-danger">@_errorMessage</span>
+                <MudItem xs="12">
+                    <MudAlert Severity="Severity.Error">@_errorMessage</MudAlert>
+                </MudItem>
             }
         </NotAuthorized>
     </AuthorizeView>
-</div>
+</MudGrid>
 
 @code {
     private string? _errorMessage = null;

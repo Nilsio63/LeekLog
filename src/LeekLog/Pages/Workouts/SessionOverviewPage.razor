@@ -6,26 +6,33 @@
 @inject IGymSessionService _gymSessionService
 @inject NavigationManager _navManager
 
-<h1>My gym sessions</h1>
+<PageTitle>Sessions</PageTitle>
 
-@if (User is not null)
-{
-    <p>Hey @User.UserName, here are your workouts.</p>
+<MudText Typo="Typo.h3">My gym sessions</MudText>
 
-    foreach (GymSessionEntity session in Sessions.OrderByDescending(o => o.Date))
+<MudGrid>
+    @if (User is not null)
     {
-        <div class="card">
-            <div class="card-header">@session.Date.ToString("d")</div>
+        <MudItem xs="12">
+            <MudText Typo="Typo.subtitle1">Hey @User.UserName, here are your workouts.</MudText>
+        </MudItem>
 
-            <div class="card-body">
-                @foreach (SessionExerciseEntity exercise in session.Exercises.OrderBy(o => o.Order))
-                {
-                    <label>@exercise.Exercise.Title: @exercise.Sets.Count Sets</label><br />
-                }
-            </div>
-        </div>
+        @foreach (GymSessionEntity session in Sessions.OrderByDescending(o => o.Date))
+        {
+            <MudItem xs="12" sm="6" md="4">
+                <MudPaper Class="pa-4">
+                    <MudStack>
+                        <MudText Typo="Typo.body1">@session.Date.ToString("d")</MudText>
+                        @foreach (SessionExerciseEntity exercise in session.Exercises.OrderBy(o => o.Order))
+                        {
+                            <MudText Typo="Typo.body2">@exercise.Exercise.Title: @exercise.Sets.Count Sets</MudText>
+                        }
+                    </MudStack>
+                </MudPaper>
+            </MudItem>
+        }
     }
-}
+</MudGrid>
 
 @code {
     public UserEntity? User { get; set; }

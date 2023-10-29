@@ -3,6 +3,7 @@ using LeekLog.Data.Extensions;
 using LeekLog.Extensions;
 using LeekLog.Services.Extensions;
 using Microsoft.EntityFrameworkCore;
+using MudBlazor.Services;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +17,7 @@ if (string.IsNullOrWhiteSpace(connectionString))
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
+builder.Services.AddMudServices();
 builder.Services.AddBlazoredLocalStorage();
 
 builder.Services

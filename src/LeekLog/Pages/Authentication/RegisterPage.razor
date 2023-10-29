@@ -9,45 +9,45 @@
 @inject IUserStore _userStore
 @inject IUserService _userService
 
-<h1>Sign up</h1>
+<PageTitle>Register</PageTitle>
 
-<div class="text-left">
+<MudText Typo="Typo.h3">Sign up</MudText>
+
+<MudGrid>
     <AuthorizeView>
         <Authorized>
-            <p>
-                Come on, man ... you are logged in, why do you want to sign up a new account?<br />
-                How did you even get here?
-            </p>
+            <MudItem>
+                <MudAlert Severity="Severity.Warning">
+                    Come on, man ... you are logged in, why do you want to sign up a new account?<br />
+                    How did you even get here?
+                </MudAlert>
+            </MudItem>
         </Authorized>
         <NotAuthorized>
-            <p>
-                Enter a unique <i>(and cool)</i> user name and password to sign up to Leek Log!
-            </p>
+            <MudItem xs="12">
+                <MudText Typo="Typo.subtitle1">
+                    Enter a unique <i>(and cool)</i> user name and password to sign up to Leek Log!
+                </MudText>
+            </MudItem>
 
-            <div class="form-container">
-                <EditForm Model="this" Context="register" OnSubmit="RegisterAsync">
-                    <label for="userName">User name:</label>
-                    <InputText id="userName" @bind-Value="UserName" /><br />
-
-                    <label for="password">Password:</label>
-                    <InputText id="password" type="password" @bind-Value="Password" /><br />
-
-                    <label for="passwordRepeat">Repeat Password:</label>
-                    <InputText id="passwordRepeat" type="password" @bind-Value="PasswordRepeat" /><br />
-
-                    <input type="submit" value="Register" />
-                </EditForm>
-            </div>
+            <MudItem xs="12">
+                <MudForm Model="this">
+                    <MudTextField Label="User name" @bind-Value="UserName" />
+                    <MudTextField Label="Password" @bind-Value="Password" />
+                    <MudTextField Label="Repeat password" @bind-Value="PasswordRepeat" />
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="RegisterAsync">Register</MudButton>
+                </MudForm>
+            </MudItem>
 
             @if (!string.IsNullOrWhiteSpace(ErrorMessage))
             {
-                <br />
-
-                <span class="text-danger">@ErrorMessage</span>
+                <MudItem xs="12">
+                    <MudAlert Severity="Severity.Error">@ErrorMessage</MudAlert>
+                </MudItem>
             }
         </NotAuthorized>
     </AuthorizeView>
-</div>
+</MudGrid>
 
 @code {
     public string UserName { get; set; } = string.Empty;
