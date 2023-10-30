@@ -20,7 +20,7 @@ public abstract class BaseStore<T> : IBaseStore<T> where T : BaseEntity
         return await context.Set<T>().ToListAsync(ct);
     }
 
-    public async Task<T?> GetByIdAsync(string id, CancellationToken ct = default)
+    public virtual async Task<T?> GetByIdAsync(string id, CancellationToken ct = default)
     {
         if (Guid.TryParse(id, out Guid guid) == false)
         {

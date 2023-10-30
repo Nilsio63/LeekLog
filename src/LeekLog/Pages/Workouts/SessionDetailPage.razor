@@ -1,0 +1,50 @@
+﻿@page "/sessions/details/{SessionId}"
+@using LeekLog.Abstractions.Entites;
+@using LeekLog.Services.Abstractions;
+@inject IGymSessionService _gymSessionService
+
+@if (Session is null)
+{
+    <MudText Typo="Typo.h3">Session???</MudText>
+
+    <MudAlert Severity="Severity.Warning">Session could not be found!</MudAlert>
+}
+else
+{
+    <MudText Typo="Typo.h3">Session from @Session.Date.ToLongDateString()</MudText>
+
+    <MudGrid>
+        @foreach (SessionExerciseEntity exercise in Session.Exercises.OrderBy(o => o.Order))
+        {
+            <MudItem xs="12" sm="6">
+                <MudPaper Class="pa-4">
+                    <MudGrid>
+                        <MudItem xs="12" md="6">
+                            <MudText Typo="Typo.h6" Color="Color.Tertiary">@exercise.Exercise.Title</MudText>
+                        </MudItem>
+                        <MudItem xs="12" md="6">
+                            <MudStack>
+                                @foreach (WorkoutSetEntity workoutSet in exercise.Sets.OrderBy(o => o.Order))
+                                {
+                                    <MudText>@workoutSet.UsedWeight kg x @workoutSet.NumberOfRepetitions</MudText>
+                                }
+                            </MudStack>
+                        </MudItem>
+                    </MudGrid>
+                </MudPaper>
+            </MudItem>
+        }
+    </MudGrid>
+}
+
+@code {
+    [Parameter]
+    public string SessionId { get; set; } = string.Empty;
+
+    public GymSessionEntity? Session { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Session = await _gymSessionService.GetByIdAsync(SessionId);
+    }
+}

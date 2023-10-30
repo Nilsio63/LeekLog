@@ -13,8 +13,18 @@ public class GymSessionService : IGymSessionService
         _gymSessionStore = gymSessionStore;
     }
 
+    public async Task<GymSessionEntity?> GetByIdAsync(string id, CancellationToken ct = default)
+    {
+        return await _gymSessionStore.GetByIdAsync(id, ct);
+    }
+
     public async Task<List<GymSessionEntity>> GetAllByUserIdAsync(string userId, CancellationToken ct = default)
     {
         return await _gymSessionStore.GetAllByUserIdAsync(userId, ct);
+    }
+
+    public async Task SaveAsync(GymSessionEntity entity, CancellationToken ct = default)
+    {
+        await _gymSessionStore.SaveAsync(entity, ct);
     }
 }

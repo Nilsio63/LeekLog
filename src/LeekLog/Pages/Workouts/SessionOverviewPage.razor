@@ -1,4 +1,4 @@
-﻿@page "/sessions"
+@page "/sessions"
 @using LeekLog.Abstractions.Entites;
 @using LeekLog.Authentication;
 @using LeekLog.Services.Abstractions;
@@ -20,7 +20,7 @@
         @foreach (GymSessionEntity session in Sessions.OrderByDescending(o => o.Date))
         {
             <MudItem xs="12" sm="6" md="4">
-                <MudPaper Class="pa-4">
+                <MudPaper Class="pa-4" @onclick="() => OpenDetails(session)">
                     <MudStack>
                         <MudText Typo="Typo.body1">@session.Date.ToString("d")</MudText>
                         @foreach (SessionExerciseEntity exercise in session.Exercises.OrderBy(o => o.Order))
@@ -31,6 +31,10 @@
                 </MudPaper>
             </MudItem>
         }
+
+        <MudItem xs="12">
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="OpenNewExercise">New</MudButton>
+        </MudItem>
     }
 </MudGrid>
 
@@ -52,5 +56,15 @@
         User = currentUser;
 
         Sessions = await _gymSessionService.GetAllByUserIdAsync(User.Id.ToString());
+    }
+
+    public void OpenDetails(GymSessionEntity session)
+    {
+        _navManager.NavigateTo($"sessions/details/{session.Id}");
+    }
+
+    public void OpenNewExercise()
+    {
+        _navManager.NavigateTo("sessions/new");
     }
 }

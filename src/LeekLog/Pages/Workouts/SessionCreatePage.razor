@@ -1,0 +1,159 @@
+﻿@page "/sessions/new"
+@using LeekLog.Abstractions.Entites;
+@using LeekLog.Authentication;
+@using LeekLog.Services.Abstractions;
+@inject IUserAuthService _userAuthService
+@inject IExerciseService _exerciseService
+@inject IGymSessionService _gymSessionService
+@inject NavigationManager _navManager
+
+<PageTitle>New session</PageTitle>
+
+<MudText Typo="Typo.h3">New session</MudText>
+
+<MudForm Model="Session">
+    <MudStack>
+        <MudStack Row="true">
+            <MudDatePicker @bind-Value="Session.Date" Label="Session date" />
+            <MudIconButton Icon="@Icons.Material.Filled.Save" Color="Color.Primary" OnClick="SaveAsync" />
+        </MudStack>
+
+        @foreach (SessionExerciseEntity exercise in Session.Exercises.OrderBy(o => o.Order))
+        {
+            <MudCard>
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudAutocomplete T="ExerciseEntity" Label="Exercise" @bind-Value="exercise.Exercise"
+                                         SearchFunc="Search" ToStringFunc="@(e => e == null ? null : e.Title)" />
+                    </CardHeaderContent>
+                    <CardHeaderActions>
+                        <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Primary" OnClick="() => RemoveExercise(exercise)" />
+                    </CardHeaderActions>
+                </MudCardHeader>
+                <MudCardContent>
+                    @foreach (WorkoutSetEntity set in exercise.Sets)
+                    {
+                        <MudStack Row="true" AlignItems="AlignItems.Stretch">
+                            <MudNumericField @bind-Value="set.NumberOfRepetitions" Label="Reps" />
+                            <MudNumericField @bind-Value="set.UsedWeight" Label="Weight (kg)" />
+                            <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Primary" OnClick="() => RemoveSet(exercise, set)" />
+                        </MudStack>
+                    }
+                </MudCardContent>
+                <MudCardActions>
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="() => AddSet(exercise)">Add set</MudButton>
+                </MudCardActions>
+            </MudCard>
+        }
+
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="AddExercise">Add exercise</MudButton>
+    </MudStack>
+</MudForm>
+
+@code {
+    public GymSessionEntity Session { get; set; } = new();
+    public List<ExerciseEntity> AllExercises { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        UserEntity? user = await _userAuthService.GetCurrentUserAsync();
+
+        if (user is null)
+        {
+            _navManager.NavigateTo("/");
+
+            return;
+        }
+
+        Session = new GymSessionEntity
+            {
+                UserId = user.Id,
+                Date = DateOnly.FromDateTime(DateTime.Today)
+            };
+
+        AllExercises = (await _exerciseService.GetAllAsync()).OrderBy(o => o.Title).ToList();
+    }
+
+    private async Task<IEnumerable<ExerciseEntity>> Search(string value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return AllExercises;
+        }
+
+        return await Task.FromResult(AllExercises.Where(o => o.Title.Contains(value, StringComparison.OrdinalIgnoreCase)));
+    }
+
+    private async Task SaveAsync()
+    {
+        foreach (SessionExerciseEntity exercise in Session.Exercises)
+        {
+            exercise.ExerciseId = exercise.Exercise.Id;
+            exercise.Exercise = null!;
+        }
+
+        await _gymSessionService.SaveAsync(Session);
+
+        _navManager.NavigateTo($"/sessions/details/{Session.Id}");
+    }
+
+    private void AddExercise()
+    {
+        Session.Exercises.Add(new SessionExerciseEntity { Order = int.MaxValue });
+
+        CalculateExerciseOrders();
+
+        StateHasChanged();
+    }
+
+    private void AddSet(SessionExerciseEntity exercise)
+    {
+        exercise.Sets.Add(new WorkoutSetEntity { Order = int.MaxValue });
+
+        CalculateSetOrders(exercise);
+
+        StateHasChanged();
+    }
+
+    private void CalculateExerciseOrders()
+    {
+        SessionExerciseEntity[] orderedExercises = Session.Exercises.OrderBy(o => o.Order).ToArray();
+
+        int orderRunner = 0;
+
+        foreach (SessionExerciseEntity exercise in orderedExercises)
+        {
+            exercise.Order = orderRunner++;
+        }
+    }
+
+    private void CalculateSetOrders(SessionExerciseEntity exercise)
+    {
+        WorkoutSetEntity[] orderedSets = exercise.Sets.OrderBy(o => o.Order).ToArray();
+
+        int orderRunner = 0;
+
+        foreach (WorkoutSetEntity set in orderedSets)
+        {
+            set.Order = orderRunner++;
+        }
+    }
+
+    private void RemoveExercise(SessionExerciseEntity exercise)
+    {
+        Session.Exercises.Remove(exercise);
+
+        CalculateExerciseOrders();
+
+        StateHasChanged();
+    }
+
+    private void RemoveSet(SessionExerciseEntity exercise, WorkoutSetEntity set)
+    {
+        exercise.Sets.Remove(set);
+
+        CalculateSetOrders(exercise);
+
+        StateHasChanged();
+    }
+}

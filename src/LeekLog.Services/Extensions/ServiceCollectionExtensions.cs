@@ -14,6 +14,7 @@ public static class ServiceCollectionExtensions
         services.AddTransient<IPasswordEncoder, PasswordEncoder>();
 
         services.AddTransient<IUserService, UserService>();
+        services.AddTransient<IExerciseService, ExerciseService>();
         services.AddTransient<IGymSessionService, GymSessionService>();
 
         return services;
