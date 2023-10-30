@@ -3,6 +3,8 @@
 @using LeekLog.Services.Abstractions;
 @inject IGymSessionService _gymSessionService
 
+<PageTitle>Session details</PageTitle>
+
 @if (Session is null)
 {
     <MudText Typo="Typo.h3">Session???</MudText>
