@@ -1,10 +1,11 @@
-@page "/sessions/new"
+﻿@page "/sessions/new"
 @using LeekLog.Abstractions.Entites;
 @using LeekLog.Authentication;
 @using LeekLog.Services.Abstractions;
 @inject IUserAuthService _userAuthService
 @inject IExerciseService _exerciseService
 @inject IGymSessionService _gymSessionService
+@inject ISnackbar _snackBar
 @inject NavigationManager _navManager
 
 <PageTitle>New session</PageTitle>
@@ -93,6 +94,8 @@
         }
 
         await _gymSessionService.SaveAsync(Session);
+
+        _snackBar.Add("Session saved successfully", Severity.Success);
 
         _navManager.NavigateTo($"/sessions/details/{Session.Id}");
     }
