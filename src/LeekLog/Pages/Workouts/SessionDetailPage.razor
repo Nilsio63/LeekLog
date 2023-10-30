@@ -16,22 +16,18 @@ else
     <MudGrid>
         @foreach (SessionExerciseEntity exercise in Session.Exercises.OrderBy(o => o.Order))
         {
-            <MudItem xs="12" sm="6">
-                <MudPaper Class="pa-4">
-                    <MudGrid>
-                        <MudItem xs="12" md="6">
-                            <MudText Typo="Typo.h6" Color="Color.Tertiary">@exercise.Exercise.Title</MudText>
-                        </MudItem>
-                        <MudItem xs="12" md="6">
-                            <MudStack>
-                                @foreach (WorkoutSetEntity workoutSet in exercise.Sets.OrderBy(o => o.Order))
-                                {
-                                    <MudText>@workoutSet.UsedWeight kg x @workoutSet.NumberOfRepetitions</MudText>
-                                }
-                            </MudStack>
-                        </MudItem>
-                    </MudGrid>
-                </MudPaper>
+            <MudItem xs="12" sm="6" md="4">
+                <MudCard>
+                    <MudCardHeader>
+                        <MudText Typo="Typo.h6" Color="Color.Tertiary">@exercise.Exercise.Title</MudText>
+                    </MudCardHeader>
+                    <MudCardContent>
+                        @foreach (WorkoutSetEntity workoutSet in exercise.Sets.OrderBy(o => o.Order))
+                        {
+                            <MudText>@workoutSet.UsedWeight kg x @workoutSet.NumberOfRepetitions</MudText>
+                        }
+                    </MudCardContent>
+                </MudCard>
             </MudItem>
         }
     </MudGrid>
