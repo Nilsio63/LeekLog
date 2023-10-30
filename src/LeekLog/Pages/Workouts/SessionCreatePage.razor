@@ -1,4 +1,4 @@
-﻿@page "/sessions/new"
+@page "/sessions/new"
 @using LeekLog.Abstractions.Entites;
 @using LeekLog.Authentication;
 @using LeekLog.Services.Abstractions;
@@ -14,7 +14,7 @@
 <MudForm Model="Session">
     <MudStack>
         <MudStack Row="true">
-            <MudDatePicker @bind-Value="Session.Date" Label="Session date" />
+            <MudDatePicker @bind-Value="Session.Date" DateChanged="d => Session.Date = DateOnly.FromDateTime(d ?? DateTime.Today)" Label="Session date" />
             <MudIconButton Icon="@Icons.Material.Filled.Save" Color="Color.Primary" OnClick="SaveAsync" />
         </MudStack>
 
