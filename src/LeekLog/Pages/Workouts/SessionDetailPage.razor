@@ -3,37 +3,41 @@
 
 <PageTitle>Session details</PageTitle>
 
-@if (Session is null)
-{
-    <MudText Typo="Typo.h3">Session???</MudText>
+<LeekLoadingOverlay IsLoading="_isLoading">
+    @if (Session is null)
+    {
+        <MudText Typo="Typo.h3">Session???</MudText>
 
-    <MudAlert Severity="Severity.Warning">Session could not be found!</MudAlert>
-}
-else
-{
-    <MudText Typo="Typo.h3">Session from @Session.Date.ToLongDateString()</MudText>
+        <MudAlert Severity="Severity.Warning">Session could not be found!</MudAlert>
+    }
+    else
+    {
+        <MudText Typo="Typo.h3">Session from @Session.Date.ToLongDateString()</MudText>
 
-    <MudGrid>
-        @foreach (SessionExerciseEntity exercise in Session.Exercises.OrderBy(o => o.Order))
-        {
-            <MudItem xs="12" sm="6" md="4">
-                <MudCard>
-                    <MudCardHeader>
-                        <MudText Typo="Typo.h6" Color="Color.Tertiary">@exercise.Exercise.Title</MudText>
-                    </MudCardHeader>
-                    <MudCardContent>
-                        @foreach (WorkoutSetEntity workoutSet in exercise.Sets.OrderBy(o => o.Order))
-                        {
-                            <MudText>@workoutSet.UsedWeight kg x @workoutSet.NumberOfRepetitions</MudText>
-                        }
-                    </MudCardContent>
-                </MudCard>
-            </MudItem>
-        }
-    </MudGrid>
-}
+        <MudGrid>
+            @foreach (SessionExerciseEntity exercise in Session.Exercises.OrderBy(o => o.Order))
+            {
+                <MudItem xs="12" sm="6" md="4">
+                    <MudCard>
+                        <MudCardHeader>
+                            <MudText Typo="Typo.h6" Color="Color.Tertiary">@exercise.Exercise.Title</MudText>
+                        </MudCardHeader>
+                        <MudCardContent>
+                            @foreach (WorkoutSetEntity workoutSet in exercise.Sets.OrderBy(o => o.Order))
+                            {
+                                <MudText>@workoutSet.UsedWeight kg x @workoutSet.NumberOfRepetitions</MudText>
+                            }
+                        </MudCardContent>
+                    </MudCard>
+                </MudItem>
+            }
+        </MudGrid>
+    }
+</LeekLoadingOverlay>
 
 @code {
+    private bool _isLoading = false;
+
     [Parameter]
     public string SessionId { get; set; } = string.Empty;
 
@@ -41,6 +45,10 @@ else
 
     protected override async Task OnInitializedAsync()
     {
+        _isLoading = true;
+
         Session = await _gymSessionService.GetByIdAsync(SessionId);
+
+        _isLoading = false;
     }
 }

@@ -1,0 +1,36 @@
+﻿@if (IsLoading)
+{
+    <MudCard>
+        <MudSkeleton SkeletonType="SkeletonType.Rectangle" Height="200px" />
+        <MudCardContent>
+            <MudSkeleton Width="30%" Height="42px;" />
+            <MudSkeleton Width="80%" />
+            <MudSkeleton Width="100%" />
+        </MudCardContent>
+        <MudCardActions>
+            <MudSkeleton Width="15%" Height="40px" Class="ml-2" />
+            <MudSkeleton Width="35%" Height="40px" Class="ml-3" />
+        </MudCardActions>
+    </MudCard>
+    <MudOverlay Visible="true" DarkBackground="true">
+        <MudStack AlignItems="AlignItems.Center">
+            <MudProgressCircular Color="Color.Secondary" Indeterminate="true" />
+            <MudText Typo="Typo.body1">@LoadingText</MudText>
+        </MudStack>
+    </MudOverlay>
+}
+else
+{
+    @ChildContent
+}
+
+@code {
+    [Parameter]
+    public bool IsLoading { get; set; }
+
+    [Parameter]
+    public string LoadingText { get; set; } = "Loading...";
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+}
