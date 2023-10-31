@@ -57,30 +57,35 @@ public class UserService : IUserService
         return new UserLoginResult(user);
     }
 
-    public async Task<UserCreationResult> TrySaveUserAsync(string userName, string password, CancellationToken ct = default)
+    public async Task<UserCreationResult> TrySaveUserAsync(UserCreateModel createModel, CancellationToken ct = default)
     {
-        if (string.IsNullOrWhiteSpace(userName))
+        if (string.IsNullOrWhiteSpace(createModel.UserName))
         {
             return new UserCreationResult("Username is required");
         }
 
-        if (string.IsNullOrWhiteSpace(password))
+        if (string.IsNullOrWhiteSpace(createModel.Password))
         {
             return new UserCreationResult("Password is required");
         }
 
-        UserEntity? existingUser = await _userStore.GetByLoginAsync(userName, ct);
+        if (string.Equals(createModel.Password, createModel.PasswordRepeat, StringComparison.Ordinal) == false)
+        {
+            return new UserCreationResult("Password didn't match password repetition");
+        }
+
+        UserEntity? existingUser = await _userStore.GetByLoginAsync(createModel.UserName, ct);
 
         if (existingUser is not null)
         {
             return new UserCreationResult($"User {existingUser.UserName} already exists");
         }
 
-        byte[] encodedPassword = _passwordEncoder.EncodePassword(password);
+        byte[] encodedPassword = _passwordEncoder.EncodePassword(createModel.Password);
 
         UserEntity newUser = new()
         {
-            UserName = userName,
+            UserName = createModel.UserName,
             Password = encodedPassword
         };
 

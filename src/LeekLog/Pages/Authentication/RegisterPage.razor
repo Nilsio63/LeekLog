@@ -25,12 +25,14 @@
             </MudItem>
 
             <MudItem xs="12">
-                <MudForm Model="this">
-                    <MudTextField Label="User name" @bind-Value="UserName" />
-                    <MudTextField Label="Password" @bind-Value="Password" />
-                    <MudTextField Label="Repeat password" @bind-Value="PasswordRepeat" />
-                    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="RegisterAsync">Register</MudButton>
-                </MudForm>
+                <MudPaper Class="pa-4">
+                    <MudForm Model="CreateModel">
+                        <MudTextField Label="User name" Required="true" @bind-Value="CreateModel.UserName" />
+                        <MudTextField Label="Password" InputType="InputType.Password" Required="true" @bind-Value="CreateModel.Password" />
+                        <MudTextField Label="Repeat password" InputType="InputType.Password" Required="true" @bind-Value="CreateModel.PasswordRepeat" />
+                        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="RegisterAsync">Register</MudButton>
+                    </MudForm>
+                </MudPaper>
             </MudItem>
 
             @if (!string.IsNullOrWhiteSpace(ErrorMessage))
@@ -44,21 +46,12 @@
 </MudGrid>
 
 @code {
-    public string UserName { get; set; } = string.Empty;
-    public string Password { get; set; } = string.Empty;
-    public string PasswordRepeat { get; set; } = string.Empty;
+    public UserCreateModel CreateModel { get; set; } = new();
     public string? ErrorMessage { get; set; }
 
     public async Task RegisterAsync()
     {
-        if (!string.Equals(Password, PasswordRepeat, StringComparison.Ordinal))
-        {
-            ErrorMessage = "Password didn't match password repetition";
-
-            return;
-        }
-
-        UserCreationResult result = await _userService.TrySaveUserAsync(UserName, Password);
+        UserCreationResult result = await _userService.TrySaveUserAsync(CreateModel);
 
         if (result.Success == false)
         {
