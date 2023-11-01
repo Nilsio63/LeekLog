@@ -2,6 +2,7 @@
 @inject NavigationManager _navManager
 @inject IUserAuthService _userAuthService
 @inject IUserService _userService
+@inject IValidator<UserCreateModel> _userCreateValidator
 
 <PageTitle>Register</PageTitle>
 
@@ -26,10 +27,10 @@
 
             <MudItem xs="12">
                 <MudPaper Class="pa-4">
-                    <MudForm Model="CreateModel">
-                        <MudTextField Label="User name" Required="true" @bind-Value="CreateModel.UserName" />
-                        <MudTextField Label="Password" InputType="InputType.Password" Required="true" @bind-Value="CreateModel.Password" />
-                        <MudTextField Label="Repeat password" InputType="InputType.Password" Required="true" @bind-Value="CreateModel.PasswordRepeat" />
+                    <MudForm @ref="@_form" Model="CreateModel" Validation="_userCreateValidator.ValidateValue">
+                        <MudTextField Label="User name" For="() => CreateModel.UserName" @bind-Value="CreateModel.UserName" />
+                        <MudTextField Label="Password" InputType="InputType.Password" For="() => CreateModel.Password" @bind-Value="CreateModel.Password" />
+                        <MudTextField Label="Repeat password" InputType="InputType.Password" For="() => CreateModel.PasswordRepeat" @bind-Value="CreateModel.PasswordRepeat" />
                         <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="RegisterAsync">Register</MudButton>
                     </MudForm>
                 </MudPaper>
@@ -46,22 +47,32 @@
 </MudGrid>
 
 @code {
+    private MudForm? _form;
+
     public UserCreateModel CreateModel { get; set; } = new();
     public string? ErrorMessage { get; set; }
 
     public async Task RegisterAsync()
     {
-        UserCreationResult result = await _userService.TrySaveUserAsync(CreateModel);
-
-        if (result.Success == false)
+        if (_form is not null)
         {
-            ErrorMessage = result.ErrorMessage;
+            await _form.Validate();
 
-            return;
+            if (_form.IsValid)
+            {
+                UserCreationResult result = await _userService.TrySaveUserAsync(CreateModel);
+
+                if (result.Success == false)
+                {
+                    ErrorMessage = result.ErrorMessage;
+
+                    return;
+                }
+
+                await _userAuthService.LoginAsync(result.CreatedUser);
+
+                _navManager.NavigateTo("/");
+            }
         }
-
-        await _userAuthService.LoginAsync(result.CreatedUser);
-
-        _navManager.NavigateTo("/");
     }
 }

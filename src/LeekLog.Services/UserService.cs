@@ -1,7 +1,9 @@
-﻿using LeekLog.Abstractions.Entites;
+﻿using FluentValidation.Results;
+using LeekLog.Abstractions.Entites;
 using LeekLog.Abstractions.Models;
 using LeekLog.Data.Abstractions.Stores;
 using LeekLog.Services.Abstractions;
+using LeekLog.Services.Abstractions.Validation;
 using LeekLog.Services.Security;
 
 namespace LeekLog.Services;
@@ -9,13 +11,16 @@ namespace LeekLog.Services;
 public class UserService : IUserService
 {
     private readonly IUserStore _userStore;
+    private readonly IValidator<UserCreateModel> _userCreateValidator;
     private readonly IPasswordEncoder _passwordEncoder;
 
     public UserService(
         IUserStore userStore,
+        IValidator<UserCreateModel> userCreateValidator,
         IPasswordEncoder passwordEncoder)
     {
         _userStore = userStore;
+        _userCreateValidator = userCreateValidator;
         _passwordEncoder = passwordEncoder;
     }
 
@@ -59,26 +64,11 @@ public class UserService : IUserService
 
     public async Task<UserCreationResult> TrySaveUserAsync(UserCreateModel createModel, CancellationToken ct = default)
     {
-        if (string.IsNullOrWhiteSpace(createModel.UserName))
-        {
-            return new UserCreationResult("Username is required");
-        }
+        ValidationResult validationResult = await _userCreateValidator.ValidateAsync(createModel, ct);
 
-        if (string.IsNullOrWhiteSpace(createModel.Password))
+        if (validationResult.IsValid == false)
         {
-            return new UserCreationResult("Password is required");
-        }
-
-        if (string.Equals(createModel.Password, createModel.PasswordRepeat, StringComparison.Ordinal) == false)
-        {
-            return new UserCreationResult("Password didn't match password repetition");
-        }
-
-        UserEntity? existingUser = await _userStore.GetByLoginAsync(createModel.UserName, ct);
-
-        if (existingUser is not null)
-        {
-            return new UserCreationResult($"User {existingUser.UserName} already exists");
+            return new UserCreationResult(string.Join(",", validationResult.Errors.Select(o => o.ErrorMessage)));
         }
 
         byte[] encodedPassword = _passwordEncoder.EncodePassword(createModel.Password);
