@@ -108,7 +108,17 @@
 
     private void AddSet(SessionExerciseEntity exercise)
     {
-        exercise.Sets.Add(new WorkoutSetEntity { Order = int.MaxValue });
+        WorkoutSetEntity? lastSet = exercise.Sets.OrderByDescending(o => o.Order).FirstOrDefault();
+
+        WorkoutSetEntity newSet = new WorkoutSetEntity { Order = int.MaxValue };
+
+        if (lastSet is not null)
+        {
+            newSet.NumberOfRepetitions = lastSet.NumberOfRepetitions;
+            newSet.UsedWeight = lastSet.UsedWeight;
+        }
+
+        exercise.Sets.Add(newSet);
 
         CalculateSetOrders(exercise);
 
