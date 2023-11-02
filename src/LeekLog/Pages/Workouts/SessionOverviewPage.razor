@@ -5,42 +5,57 @@
 
 <PageTitle>Sessions</PageTitle>
 
-<MudText Typo="Typo.h3">My gym sessions</MudText>
+<LeekLoadingOverlay IsLoading="_isLoading">
+    <MudText Typo="Typo.h3">My gym sessions</MudText>
 
-<MudGrid>
-    @if (User is not null)
-    {
-        <MudItem xs="12">
-            <MudText Typo="Typo.subtitle1">Hey @User.UserName, here are your workouts.</MudText>
-        </MudItem>
-
-        @foreach (GymSessionEntity session in Sessions.OrderByDescending(o => o.Date))
+    <MudGrid>
+        @if (User is not null)
         {
-            <MudItem xs="12" sm="6" md="4">
-                <MudPaper Class="pa-4" @onclick="() => OpenDetails(session)">
-                    <MudStack>
-                        <MudText Typo="Typo.body1">@session.Date.ToString("d")</MudText>
-                        @foreach (SessionExerciseEntity exercise in session.Exercises.OrderBy(o => o.Order))
-                        {
-                            <MudText Typo="Typo.body2">@exercise.Exercise.Title: @exercise.Sets.Count Sets</MudText>
-                        }
-                    </MudStack>
-                </MudPaper>
+            <MudItem xs="12">
+                <MudText Typo="Typo.subtitle1">Hey @User.UserName, here are your workouts.</MudText>
+            </MudItem>
+
+            @foreach (GymSessionEntity session in Sessions.OrderByDescending(o => o.Date))
+            {
+                <MudItem xs="12" md="6" lg="4">
+                    <MudCard Class="mud-height-full">
+                        <MudCardHeader>
+                            <CardHeaderContent>
+                                <MudText Typo="Typo.h6" Color="Color.Tertiary">@session.Date.ToString("d")</MudText>
+                            </CardHeaderContent>
+                            <CardHeaderActions>
+                                <MudTooltip Text="View session details">
+                                    <MudIconButton Icon="@Icons.Material.Filled.Info" Color="Color.Tertiary" OnClick="() => OpenDetails(session)" />
+                                </MudTooltip>
+                            </CardHeaderActions>
+                        </MudCardHeader>
+                        <MudCardContent>
+                            @foreach (SessionExerciseEntity exercise in session.Exercises.OrderBy(o => o.Order))
+                            {
+                                <MudText Typo="Typo.body2">@exercise.Exercise.Title: @exercise.Sets.Count Sets</MudText>
+                            }
+                        </MudCardContent>
+                    </MudCard>
+                </MudItem>
+            }
+
+            <MudItem xs="12">
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="OpenNewExercise">New</MudButton>
             </MudItem>
         }
-
-        <MudItem xs="12">
-            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="OpenNewExercise">New</MudButton>
-        </MudItem>
-    }
-</MudGrid>
+    </MudGrid>
+</LeekLoadingOverlay>
 
 @code {
+    private bool _isLoading = false;
+
     public UserEntity? User { get; set; }
     public List<GymSessionEntity> Sessions { get; set; } = new();
 
     protected override async Task OnInitializedAsync()
     {
+        _isLoading = true;
+
         UserEntity? currentUser = await _userAuthService.GetCurrentUserAsync();
 
         if (currentUser is null)
@@ -53,6 +68,8 @@
         User = currentUser;
 
         Sessions = await _gymSessionService.GetAllByUserIdAsync(User.Id.ToString());
+
+        _isLoading = false;
     }
 
     public void OpenDetails(GymSessionEntity session)

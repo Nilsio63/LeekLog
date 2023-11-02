@@ -27,7 +27,7 @@
 
             <MudItem xs="12">
                 <MudPaper Class="pa-4">
-                    <MudForm @ref="@_form" Model="CreateModel" Validation="_userCreateValidator.ValidateValue">
+                    <MudForm @ref="@_form" Model="CreateModel" Validation="_userCreateValidator.ValidateValueFunction">
                         <MudTextField Label="User name" For="() => CreateModel.UserName" @bind-Value="CreateModel.UserName" />
                         <MudTextField Label="Password" InputType="InputType.Password" For="() => CreateModel.Password" @bind-Value="CreateModel.Password" />
                         <MudTextField Label="Repeat password" InputType="InputType.Password" For="() => CreateModel.PasswordRepeat" @bind-Value="CreateModel.PasswordRepeat" />

@@ -15,10 +15,14 @@
         <MudText Typo="Typo.h3">Session from @Session.Date.ToLongDateString()</MudText>
 
         <MudGrid>
+            <MudItem xs="12">
+                <MudText Typo="Typo.subtitle1">You completed a total of @Session.Exercises.Count exercises on that day!</MudText>
+            </MudItem>
+
             @foreach (SessionExerciseEntity exercise in Session.Exercises.OrderBy(o => o.Order))
             {
                 <MudItem xs="12" sm="6" md="4">
-                    <MudCard>
+                    <MudCard Class="mud-height-full">
                         <MudCardHeader>
                             <MudText Typo="Typo.h6" Color="Color.Tertiary">@exercise.Exercise.Title</MudText>
                         </MudCardHeader>
