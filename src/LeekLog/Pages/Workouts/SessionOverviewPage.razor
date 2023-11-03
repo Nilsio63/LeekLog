@@ -1,6 +1,8 @@
 @page "/sessions"
 @inject IUserAuthService _userAuthService
 @inject IGymSessionService _gymSessionService
+@inject IDialogService _dialogService
+@inject ISnackbar _snackBar
 @inject NavigationManager _navManager
 
 <PageTitle>Sessions</PageTitle>
@@ -26,6 +28,9 @@
                             <CardHeaderActions>
                                 <MudTooltip Text="View session details">
                                     <MudIconButton Icon="@Icons.Material.Filled.Info" Color="Color.Tertiary" OnClick="() => OpenDetails(session)" />
+                                </MudTooltip>
+                                <MudTooltip Text="Delete session">
+                                    <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Secondary" OnClick="() => DeleteAsync(session)" />
                                 </MudTooltip>
                             </CardHeaderActions>
                         </MudCardHeader>
@@ -70,6 +75,24 @@
         Sessions = await _gymSessionService.GetAllByUserIdAsync(User.Id.ToString());
 
         _isLoading = false;
+    }
+
+    private async Task DeleteAsync(GymSessionEntity entity)
+    {
+        bool? dialogResult = await _dialogService.ShowMessageBox(
+            "Warning",
+            $"Do you really want to delete your session from {entity.Date:d}?",
+            yesText: "Delete",
+            cancelText: "No");
+
+        if (dialogResult == true)
+        {
+            await _gymSessionService.DeleteAsync(entity.Id);
+
+            _snackBar.Add("Session successfully deleted", Severity.Success);
+
+            Sessions.Remove(entity);
+        }
     }
 
     public void OpenDetails(GymSessionEntity session)

@@ -27,4 +27,9 @@ public class GymSessionService : IGymSessionService
     {
         await _gymSessionStore.SaveAsync(entity, ct);
     }
+
+    public async Task DeleteAsync(Guid sessionId, CancellationToken ct = default)
+    {
+        await _gymSessionStore.DeleteAsync(sessionId, ct);
+    }
 }
