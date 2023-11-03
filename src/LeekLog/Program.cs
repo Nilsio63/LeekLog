@@ -4,6 +4,12 @@ using LeekLog.Extensions;
 using LeekLog.Services.Extensions;
 using Microsoft.EntityFrameworkCore;
 using MudBlazor.Services;
+using System.Globalization;
+
+CultureInfo customCulture = new("en-DE");
+
+CultureInfo.DefaultThreadCurrentCulture = customCulture;
+CultureInfo.DefaultThreadCurrentUICulture = customCulture;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
