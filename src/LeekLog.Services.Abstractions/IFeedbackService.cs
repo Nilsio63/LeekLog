@@ -7,4 +7,5 @@ public interface IFeedbackService
     Task<FeedbackEntity?> GetByIdAsync(string id, CancellationToken ct = default);
     Task<List<FeedbackEntity>> GetAllByUserIdAsync(string userId, CancellationToken ct = default);
     Task SaveAsync(FeedbackEntity entity, CancellationToken ct = default);
+    Task DeleteAsync(Guid feedbackId, CancellationToken ct = default);
 }

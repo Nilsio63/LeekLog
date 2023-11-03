@@ -66,6 +66,16 @@ public abstract class BaseStore<T> : IBaseStore<T> where T : BaseEntity
         await context.SaveChangesAsync(ct);
     }
 
+    public async Task DeleteAsync(Guid entityId, CancellationToken ct = default)
+    {
+        using LeekLogDbContext context = await _dbContextFactory.CreateDbContextAsync(ct);
+
+        await context
+            .Set<T>()
+            .Where(o => o.Id == entityId)
+            .ExecuteDeleteAsync(ct);
+    }
+
     public async Task DeleteAsync(T entity, CancellationToken ct = default)
     {
         await DeleteAllAsync(new[] { entity }, ct);

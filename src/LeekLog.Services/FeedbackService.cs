@@ -27,4 +27,9 @@ public class FeedbackService : IFeedbackService
     {
         await _feedbackStore.SaveAsync(entity, ct);
     }
+
+    public async Task DeleteAsync(Guid feedbackId, CancellationToken ct = default)
+    {
+        await _feedbackStore.DeleteAsync(feedbackId, ct);
+    }
 }
