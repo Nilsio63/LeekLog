@@ -10,40 +10,42 @@
 
 <MudText Typo="Typo.h3">My feedbacks</MudText>
 
-<MudGrid>
-    <MudItem xs="12">
-        <MudText Typo="Typo.subtitle1">Here you can find and create feedback for yourself!</MudText>
-    </MudItem>
-
-    @foreach (FeedbackEntity feedback in Feedbacks.OrderByDescending(o => o.Date))
-    {
-        <MudItem xs="12" md="6">
-            <MudCard Class="mud-height-full">
-                <MudCardHeader>
-                    <CardHeaderContent>
-                        <MudText Typo="Typo.h6" Color="Color.Tertiary">@feedback.Date.ToShortDateString()</MudText>
-                    </CardHeaderContent>
-                    <CardHeaderActions>
-                        <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Secondary" OnClick="() => DeleteAsync(feedback)" />
-                    </CardHeaderActions>
-                </MudCardHeader>
-                <MudCardContent>
-                    <MudStack>
-                        @if (feedback.BodyWeight.HasValue)
-                        {
-                            <MudText Typo="Typo.body1">Body weight: @feedback.BodyWeight?.ToString("N2") kg</MudText>
-                        }
-                        <MudText Style="white-space: pre-wrap" Typo="Typo.body1">Notes:<br />@feedback.Notes</MudText>
-                    </MudStack>
-                </MudCardContent>
-            </MudCard>
+<LeekLoadingOverlay IsLoading="_isLoading">
+    <MudGrid>
+        <MudItem xs="12">
+            <MudText Typo="Typo.subtitle1">Here you can find and create feedback for yourself!</MudText>
         </MudItem>
-    }
 
-    <MudItem xs="12">
-        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="OpenNewFeedback">New</MudButton>
-    </MudItem>
-</MudGrid>
+        @foreach (FeedbackEntity feedback in Feedbacks.OrderByDescending(o => o.Date))
+        {
+            <MudItem xs="12" md="6">
+                <MudCard Class="mud-height-full">
+                    <MudCardHeader>
+                        <CardHeaderContent>
+                            <MudText Typo="Typo.h6" Color="Color.Tertiary">@feedback.Date.ToShortDateString()</MudText>
+                        </CardHeaderContent>
+                        <CardHeaderActions>
+                            <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Secondary" OnClick="() => DeleteAsync(feedback)" />
+                        </CardHeaderActions>
+                    </MudCardHeader>
+                    <MudCardContent>
+                        <MudStack>
+                            @if (feedback.BodyWeight.HasValue)
+                            {
+                                <MudText Typo="Typo.body1">Body weight: @feedback.BodyWeight?.ToString("N2") kg</MudText>
+                            }
+                            <MudText Style="white-space: pre-wrap" Typo="Typo.body1">Notes:<br />@feedback.Notes</MudText>
+                        </MudStack>
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+        }
+
+        <MudItem xs="12">
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="OpenNewFeedback">New</MudButton>
+        </MudItem>
+    </MudGrid>
+</LeekLoadingOverlay>
 
 @code {
     private bool _isLoading = false;
@@ -52,6 +54,8 @@
 
     protected override async Task OnInitializedAsync()
     {
+        _isLoading = true;
+
         UserEntity? user = await _userAuthService.GetCurrentUserAsync();
 
         if (user is null)
@@ -62,6 +66,8 @@
         }
 
         Feedbacks = await _feedbackService.GetAllByUserIdAsync(user.Id.ToString());
+
+        _isLoading = false;
     }
 
     private async Task DeleteAsync(FeedbackEntity entity)
