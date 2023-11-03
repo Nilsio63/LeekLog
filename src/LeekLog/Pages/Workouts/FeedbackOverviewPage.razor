@@ -24,7 +24,7 @@
                     <MudStack>
                         @if (feedback.BodyWeight.HasValue)
                         {
-                            <MudText Typo="Typo.body1">Body weight (kg): @feedback.BodyWeight?.ToString("N2")</MudText>
+                            <MudText Typo="Typo.body1">Body weight: @feedback.BodyWeight?.ToString("N2") kg</MudText>
                         }
                         <MudText Style="white-space: pre-wrap" Typo="Typo.body1">Notes:<br />@feedback.Notes</MudText>
                     </MudStack>
