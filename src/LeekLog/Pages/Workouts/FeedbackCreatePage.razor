@@ -1,0 +1,53 @@
+﻿@page "/feedback/new"
+@inject IUserAuthService _userAuthService
+@inject IFeedbackService _feedbackService
+@inject ISnackbar _snackBar
+@inject NavigationManager _navManager
+
+<PageTitle>New feedback</PageTitle>
+
+<MudText Typo="Typo.h3">New feedback</MudText>
+
+<MudForm Model="Feedback">
+    <MudCard>
+        <MudCardContent>
+            <MudDatePicker @bind-Value="Feedback.Date" Label="Date" DateChanged="d => Feedback.Date = DateOnly.FromDateTime(d ?? DateTime.Today)" />
+            <MudNumericField @bind-Value="Feedback.BodyWeight" Label="Body weight (kg)" />
+            <MudTextField @bind-Value="Feedback.Notes" Lines="5" Label="Notes" />
+        </MudCardContent>
+        <MudCardActions>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="SaveAsync">Save</MudButton>
+        </MudCardActions>
+    </MudCard>
+</MudForm>
+
+@code {
+    public FeedbackEntity Feedback { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        UserEntity? user = await _userAuthService.GetCurrentUserAsync();
+
+        if (user is null)
+        {
+            _navManager.NavigateTo("/");
+
+            return;
+        }
+
+        Feedback = new FeedbackEntity
+            {
+                UserId = user.Id,
+                Date = DateOnly.FromDateTime(DateTime.Today)
+            };
+    }
+
+    public async Task SaveAsync()
+    {
+        await _feedbackService.SaveAsync(Feedback);
+
+        _snackBar.Add("Feedback saved successfully", Severity.Success);
+
+        _navManager.NavigateTo($"/feedback");
+    }
+}

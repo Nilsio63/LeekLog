@@ -1,0 +1,64 @@
+﻿@page "/feedback"
+@using System.Web;
+@inject IUserAuthService _userAuthService
+@inject IFeedbackService _feedbackService
+@inject NavigationManager _navManager
+
+<PageTitle>Feedback</PageTitle>
+
+<MudText Typo="Typo.h3">My feedbacks</MudText>
+
+<MudGrid>
+    <MudItem xs="12">
+        <MudText Typo="Typo.subtitle1">Here you can find and create feedback for yourself!</MudText>
+    </MudItem>
+
+    @foreach (FeedbackEntity feedback in Feedbacks.OrderByDescending(o => o.Date))
+    {
+        <MudItem xs="12" md="6">
+            <MudCard>
+                <MudCardHeader>
+                    <MudText Typo="Typo.h6" Color="Color.Tertiary">@feedback.Date.ToShortDateString()</MudText>
+                </MudCardHeader>
+                <MudCardContent>
+                    <MudStack>
+                        @if (feedback.BodyWeight.HasValue)
+                        {
+                            <MudText Typo="Typo.body1">Body weight (kg): @feedback.BodyWeight?.ToString("N2")</MudText>
+                        }
+                        <MudText Typo="Typo.body1">Notes:<br />@HttpUtility.HtmlEncode(feedback.Notes)</MudText>
+                    </MudStack>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+    }
+
+    <MudItem xs="12">
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="OpenNewFeedback">New</MudButton>
+    </MudItem>
+</MudGrid>
+
+@code {
+    private bool _isLoading = false;
+
+    public List<FeedbackEntity> Feedbacks { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        UserEntity? user = await _userAuthService.GetCurrentUserAsync();
+
+        if (user is null)
+        {
+            _navManager.NavigateTo("/");
+
+            return;
+        }
+
+        Feedbacks = await _feedbackService.GetAllByUserIdAsync(user.Id.ToString());
+    }
+
+    private void OpenNewFeedback()
+    {
+        _navManager.NavigateTo("feedback/new");
+    }
+}

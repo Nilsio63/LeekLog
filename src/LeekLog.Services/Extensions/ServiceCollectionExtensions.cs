@@ -18,6 +18,7 @@ public static class ServiceCollectionExtensions
 
         services.AddTransient<IUserService, UserService>();
         services.AddTransient<IExerciseService, ExerciseService>();
+        services.AddTransient<IFeedbackService, FeedbackService>();
         services.AddTransient<IGymSessionService, GymSessionService>();
 
         services.AddTransient<IValidator<UserCreateModel>, UserCreateModelValidator>();
