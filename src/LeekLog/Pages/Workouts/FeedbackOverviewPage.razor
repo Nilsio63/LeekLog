@@ -25,7 +25,9 @@
                             <MudText Typo="Typo.h6" Color="Color.Tertiary">@feedback.Date.ToShortDateString()</MudText>
                         </CardHeaderContent>
                         <CardHeaderActions>
-                            <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Secondary" OnClick="() => DeleteAsync(feedback)" />
+                            <MudTooltip Text="Delete feedback">
+                                <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Secondary" OnClick="() => DeleteAsync(feedback)" />
+                            </MudTooltip>
                         </CardHeaderActions>
                     </MudCardHeader>
                     <MudCardContent>
