@@ -6,5 +6,9 @@ public class WorkoutSetEntity : BaseEntity
 
     public int Order { get; set; }
     public int CleanRepetitions { get; set; }
+    public int UncleanRepetitions { get; set; }
+    public int FailedRepetitions { get; set; }
+    public int PartialRepetitions { get; set; }
+    public int NegativeRepetitions { get; set; }
     public double UsedWeight { get; set; }
 }
