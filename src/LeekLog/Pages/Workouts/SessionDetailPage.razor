@@ -29,7 +29,7 @@
                         <MudCardContent>
                             @foreach (WorkoutSetEntity workoutSet in exercise.Sets.OrderBy(o => o.Order))
                             {
-                                <MudText>@workoutSet.UsedWeight kg x @workoutSet.NumberOfRepetitions</MudText>
+                                <MudText>@workoutSet.UsedWeight kg x @workoutSet.CleanRepetitions</MudText>
                             }
                         </MudCardContent>
                     </MudCard>

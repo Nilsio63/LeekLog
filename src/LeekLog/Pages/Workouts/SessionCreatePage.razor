@@ -32,7 +32,7 @@
                     @foreach (WorkoutSetEntity set in exercise.Sets)
                     {
                         <MudStack Row="true" AlignItems="AlignItems.Stretch">
-                            <MudNumericField @bind-Value="set.NumberOfRepetitions" Label="Reps" />
+                            <MudNumericField @bind-Value="set.CleanRepetitions" Label="Reps" />
                             <MudNumericField @bind-Value="set.UsedWeight" Label="Weight (kg)" />
                             <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Primary" OnClick="() => RemoveSet(exercise, set)" />
                         </MudStack>
@@ -114,7 +114,7 @@
 
         if (lastSet is not null)
         {
-            newSet.NumberOfRepetitions = lastSet.NumberOfRepetitions;
+            newSet.CleanRepetitions = lastSet.CleanRepetitions;
             newSet.UsedWeight = lastSet.UsedWeight;
         }
 
