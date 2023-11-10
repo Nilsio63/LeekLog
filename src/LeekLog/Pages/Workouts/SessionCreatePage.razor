@@ -1,4 +1,4 @@
-﻿@page "/sessions/new"
+@page "/sessions/new"
 @inject IUserAuthService _userAuthService
 @inject IExerciseService _exerciseService
 @inject IGymSessionService _gymSessionService
@@ -7,45 +7,58 @@
 
 <PageTitle>New session</PageTitle>
 
-<MudText Typo="Typo.h3">New session</MudText>
+<MudStack Row="true">
+    <MudText Typo="Typo.h3">New session</MudText>
+    <MudSpacer />
+    <MudIconButton Icon="@Icons.Material.Filled.Save" Color="Color.Primary" OnClick="SaveAsync" />
+</MudStack>
 
 <MudForm Model="Session">
-    <MudStack>
-        <MudStack Row="true">
+    <MudGrid>
+        <MudItem xs="12" md="4">
             <MudDatePicker @bind-Value="Session.Date" DateChanged="d => Session.Date = DateOnly.FromDateTime(d ?? DateTime.Today)" Label="Session date" />
-            <MudIconButton Icon="@Icons.Material.Filled.Save" Color="Color.Primary" OnClick="SaveAsync" />
-        </MudStack>
+        </MudItem>
+        <MudItem xs="12" md="4">
+            <MudTextField T="TimeSpan?" @bind-Value="Session.Duration" Mask="@(new PatternMask("00:00:00"))" Label="Duration" />
+        </MudItem>
+        <MudItem xs="12" md="4">
+            <MudNumericField @bind-Value="Session.AverageHeartRate" Label="Average heart rate" />
+        </MudItem>
 
         @foreach (SessionExerciseEntity exercise in Session.Exercises.OrderBy(o => o.Order))
         {
-            <MudCard>
-                <MudCardHeader>
-                    <CardHeaderContent>
-                        <MudAutocomplete T="ExerciseEntity" Label="Exercise" @bind-Value="exercise.Exercise" MaxItems="20"
-                                         SearchFunc="Search" ToStringFunc="@(e => e == null ? null : e.Title)" />
-                    </CardHeaderContent>
-                    <CardHeaderActions>
-                        <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Primary" OnClick="() => RemoveExercise(exercise)" />
-                    </CardHeaderActions>
-                </MudCardHeader>
-                <MudCardContent>
-                    @foreach (WorkoutSetEntity set in exercise.Sets)
-                    {
-                        <MudStack Row="true" AlignItems="AlignItems.Stretch">
-                            <MudNumericField @bind-Value="set.UsedWeight" Label="Weight (kg)" />
-                            <MudNumericField @bind-Value="set.CleanRepetitions" Label="Reps" />
-                            <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Primary" OnClick="() => RemoveSet(exercise, set)" />
-                        </MudStack>
-                    }
-                </MudCardContent>
-                <MudCardActions>
-                    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="() => AddSet(exercise)">Add set</MudButton>
-                </MudCardActions>
-            </MudCard>
+            <MudItem xs="12">
+                <MudCard>
+                    <MudCardHeader>
+                        <CardHeaderContent>
+                            <MudAutocomplete T="ExerciseEntity" Label="Exercise" @bind-Value="exercise.Exercise" MaxItems="20"
+                                             SearchFunc="Search" ToStringFunc="@(e => e == null ? null : e.Title)" />
+                        </CardHeaderContent>
+                        <CardHeaderActions>
+                            <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Primary" OnClick="() => RemoveExercise(exercise)" />
+                        </CardHeaderActions>
+                    </MudCardHeader>
+                    <MudCardContent>
+                        @foreach (WorkoutSetEntity set in exercise.Sets)
+                        {
+                            <MudStack Row="true" AlignItems="AlignItems.Stretch">
+                                <MudNumericField @bind-Value="set.UsedWeight" Label="Weight (kg)" />
+                                <MudNumericField @bind-Value="set.CleanRepetitions" Label="Reps" />
+                                <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Primary" OnClick="() => RemoveSet(exercise, set)" />
+                            </MudStack>
+                        }
+                    </MudCardContent>
+                    <MudCardActions>
+                        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="() => AddSet(exercise)">Add set</MudButton>
+                    </MudCardActions>
+                </MudCard>
+            </MudItem>
         }
 
-        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="AddExercise">Add exercise</MudButton>
-    </MudStack>
+        <MudItem xs="12">
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="AddExercise">Add exercise</MudButton>
+        </MudItem>
+    </MudGrid>
 </MudForm>
 
 @code {
