@@ -35,17 +35,24 @@
                             <MudText Typo="Typo.h6" Color="Color.Tertiary">@exercise.Exercise?.Title</MudText>
                         </CardHeaderContent>
                         <CardHeaderActions>
-                            <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Primary" OnClick="() => RemoveExercise(exercise)" />
+                            <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Secondary" OnClick="() => RemoveExercise(exercise)" />
                         </CardHeaderActions>
                     </MudCardHeader>
                     <MudCardContent>
                         @foreach (WorkoutSetEntity set in exercise.Sets)
                         {
-                            <MudStack Row="true" AlignItems="AlignItems.Stretch">
-                                <MudNumericField @bind-Value="set.UsedWeight" Label="Weight (kg)" />
-                                <MudNumericField @bind-Value="set.CleanRepetitions" Label="Reps" />
-                                <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Primary" OnClick="() => RemoveSet(exercise, set)" />
-                            </MudStack>
+                            <MudGrid>
+                                <MudItem xs="12" sm="6">
+                                    <MudNumericField @bind-Value="set.UsedWeight" Label="Weight (kg)" />
+                                </MudItem>
+                                <MudItem xs="12" sm="6">
+                                    <MudStack Row="true" AlignItems="AlignItems.Stretch">
+                                        <MudNumericField @bind-Value="set.CleanRepetitions" Label="Clean reps" />
+                                        <MudIconButton Icon="@Icons.Material.Filled.Ballot" Color="Color.Primary" OnClick="() => OpenRepitionsDetailDialog(set)" />
+                                        <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Secondary" OnClick="() => RemoveSet(exercise, set)" />
+                                    </MudStack>
+                                </MudItem>
+                            </MudGrid>
                         }
                     </MudCardContent>
                     <MudCardActions>
@@ -141,6 +148,20 @@
         CalculateSetOrders(exercise);
 
         StateHasChanged();
+    }
+
+    private async Task OpenRepitionsDetailDialog(WorkoutSetEntity set)
+    {
+        DialogParameters<ExtendedRepetitionsEditDialog> parameters = new() { { o => o.WorkoutSet, set } };
+
+        IDialogReference dialog = await _dialogService.ShowAsync<ExtendedRepetitionsEditDialog>("Edit repetitions", parameters);
+
+        WorkoutSetEntity? editedSet = await dialog.GetReturnValueAsync<WorkoutSetEntity?>();
+
+        if (editedSet is not null)
+        {
+            StateHasChanged();
+        }
     }
 
     private void CalculateExerciseOrders()

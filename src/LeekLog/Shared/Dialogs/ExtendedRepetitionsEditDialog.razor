@@ -1,0 +1,24 @@
+﻿<MudDialog DisableSidePadding="true">
+    <DialogContent>
+        <MudContainer>
+            <MudNumericField @bind-Value="WorkoutSet.CleanRepetitions" Label="Clean reps" />
+            <MudNumericField @bind-Value="WorkoutSet.UncleanRepetitions" Label="Unclean reps" />
+            <MudNumericField @bind-Value="WorkoutSet.FailedRepetitions" Label="Failed reps" />
+            <MudNumericField @bind-Value="WorkoutSet.PartialRepetitions" Label="Partial reps" />
+            <MudNumericField @bind-Value="WorkoutSet.NegativeRepetitions" Label="Negative reps" />
+        </MudContainer>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Color="Color.Primary" OnClick="Confirm">Ok</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] public MudDialogInstance MudDialog { get; set; } = null!;
+    [Parameter] public WorkoutSetEntity WorkoutSet { get; set; } = new();
+
+    public void Confirm()
+    {
+        MudDialog.Close(WorkoutSet);
+    }
+}
