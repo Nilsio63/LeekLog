@@ -3,6 +3,7 @@ using LeekLog.Data.Extensions;
 using LeekLog.Extensions;
 using LeekLog.Services.Extensions;
 using Microsoft.EntityFrameworkCore;
+using MudBlazor;
 using MudBlazor.Services;
 using System.Globalization;
 
@@ -23,7 +24,14 @@ if (string.IsNullOrWhiteSpace(connectionString))
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddMudServices();
+builder.Services.AddMudServices(config =>
+{
+    config.SnackbarConfiguration.PositionClass = Defaults.Classes.Position.BottomLeft;
+
+    config.SnackbarConfiguration.PreventDuplicates = false;
+    config.SnackbarConfiguration.NewestOnTop = false;
+    config.SnackbarConfiguration.ShowCloseIcon = true;
+});
 builder.Services.AddBlazoredLocalStorage();
 
 builder.Services
