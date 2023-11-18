@@ -29,7 +29,7 @@
                         <MudCardContent>
                             @foreach (WorkoutSetEntity workoutSet in exercise.Sets.OrderBy(o => o.Order))
                             {
-                                <MudText>@workoutSet.UsedWeight kg x @workoutSet.CleanRepetitions</MudText>
+                                <MudText>@GetWorkoutSetDisplayText(workoutSet)</MudText>
                             }
                         </MudCardContent>
                     </MudCard>
@@ -54,5 +54,31 @@
         Session = await _gymSessionService.GetByIdAsync(SessionId);
 
         _isLoading = false;
+    }
+
+    private string GetWorkoutSetDisplayText(WorkoutSetEntity set)
+    {
+        List<string> additionalRepTexts = new();
+
+        if (set.UncleanRepetitions > 0)
+        {
+            additionalRepTexts.Add($"+{set.UncleanRepetitions} unclean");
+        }
+        if (set.FailedRepetitions > 0)
+        {
+            additionalRepTexts.Add($"+{set.FailedRepetitions} failed");
+        }
+        if (set.PartialRepetitions > 0)
+        {
+            additionalRepTexts.Add($"+{set.PartialRepetitions} partials");
+        }
+        if (set.NegativeRepetitions > 0)
+        {
+            additionalRepTexts.Add($"+{set.NegativeRepetitions} negatives");
+        }
+
+        string additionalReps = string.Join(" ", additionalRepTexts);
+
+        return $"{set.UsedWeight}kg x {set.CleanRepetitions} {additionalReps}".Trim();
     }
 }

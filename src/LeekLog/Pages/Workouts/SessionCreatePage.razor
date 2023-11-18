@@ -47,7 +47,7 @@
                                 </MudItem>
                                 <MudItem xs="12" sm="6">
                                     <MudStack Row="true" AlignItems="AlignItems.Stretch">
-                                        <MudNumericField @bind-Value="set.CleanRepetitions" Label="Clean reps" />
+                                        <MudNumericField HelperText="@GetAdditionalRepCountText(set)" @bind-Value="set.CleanRepetitions" Label="Clean reps" />
                                         <MudIconButton Icon="@Icons.Material.Filled.Ballot" Color="Color.Primary" OnClick="() => OpenRepitionsDetailDialog(set)" />
                                         <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Secondary" OnClick="() => RemoveSet(exercise, set)" />
                                     </MudStack>
@@ -90,6 +90,30 @@
             };
 
         AllExercises = (await _exerciseService.GetAllAsync()).OrderBy(o => o.Title).ToList();
+    }
+
+    private string GetAdditionalRepCountText(WorkoutSetEntity set)
+    {
+        List<string> additionalRepTexts = new();
+
+        if (set.UncleanRepetitions > 0)
+        {
+            additionalRepTexts.Add($"+{set.UncleanRepetitions} unclean");
+        }
+        if (set.FailedRepetitions > 0)
+        {
+            additionalRepTexts.Add($"+{set.FailedRepetitions} failed");
+        }
+        if (set.PartialRepetitions > 0)
+        {
+            additionalRepTexts.Add($"+{set.PartialRepetitions} partials");
+        }
+        if (set.NegativeRepetitions > 0)
+        {
+            additionalRepTexts.Add($"+{set.NegativeRepetitions} negatives");
+        }
+
+        return string.Join(" ", additionalRepTexts);
     }
 
     private async Task SaveAsync()
