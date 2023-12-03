@@ -17,6 +17,20 @@
         <MudGrid>
             <MudItem xs="12">
                 <MudText Typo="Typo.subtitle1">You completed a total of @Session.Exercises.Count exercises on that day!</MudText>
+                @if (Session.Duration.HasValue)
+                {
+                    <MudStack Row="true">
+                        <MudIcon Icon="@Icons.Material.Filled.Timer" />
+                        <MudText Typo="Typo.subtitle1">Duration: @Session.Duration.Value.ToString("c")</MudText>
+                    </MudStack>
+                }
+                @if (Session.AverageHeartRate.HasValue)
+                {
+                    <MudStack Row="true">
+                        <MudIcon Icon="@Icons.Material.Filled.MonitorHeart" />
+                        <MudText Typo="Typo.subtitle1">Avg. heart rate: @Session.AverageHeartRate</MudText>
+                    </MudStack>
+                }
             </MudItem>
 
             @foreach (SessionExerciseEntity exercise in Session.Exercises.OrderBy(o => o.Order))

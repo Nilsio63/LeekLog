@@ -23,7 +23,24 @@
                     <MudCard Class="mud-height-full">
                         <MudCardHeader>
                             <CardHeaderContent>
-                                <MudText Typo="Typo.h6" Color="Color.Tertiary">@session.Date.ToString("d")</MudText>
+                                <MudStack Row="true">
+                                    <MudIcon Icon="@Icons.Material.Filled.CalendarMonth"Color="Color.Tertiary" />
+                                    <MudText Typo="Typo.body1" Color="Color.Tertiary">@session.Date.ToString("d")</MudText>
+                                </MudStack>
+                                @if (session.Duration.HasValue)
+                                {
+                                    <MudStack Row="true">
+                                        <MudIcon Icon="@Icons.Material.Filled.Timer" Size="Size.Small" Color="Color.Tertiary" />
+                                        <MudText Typo="Typo.body2" Color="Color.Tertiary">@session.Duration.Value.ToString("c")</MudText>
+                                    </MudStack>
+                                }
+                                @if (session.AverageHeartRate.HasValue)
+                                {
+                                    <MudStack Row="true">
+                                        <MudIcon Icon="@Icons.Material.Filled.MonitorHeart" Size="Size.Small" Color="Color.Tertiary" />
+                                        <MudText Typo="Typo.body2" Color="Color.Tertiary">@session.AverageHeartRate</MudText>
+                                    </MudStack>
+                                }
                             </CardHeaderContent>
                             <CardHeaderActions>
                                 <MudTooltip Text="View session details">
