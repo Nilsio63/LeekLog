@@ -24,7 +24,7 @@
                         <MudCardHeader>
                             <CardHeaderContent>
                                 <MudStack Row="true">
-                                    <MudIcon Icon="@Icons.Material.Filled.CalendarMonth"Color="Color.Tertiary" />
+                                    <MudIcon Icon="@Icons.Material.Filled.CalendarMonth" Color="Color.Tertiary" />
                                     <MudText Typo="Typo.body1" Color="Color.Tertiary">@session.Date.ToString("d")</MudText>
                                 </MudStack>
                                 @if (session.Duration.HasValue)
@@ -41,6 +41,10 @@
                                         <MudText Typo="Typo.body2" Color="Color.Tertiary">@session.AverageHeartRate</MudText>
                                     </MudStack>
                                 }
+                                <MudStack Row="true">
+                                    <MudIcon Icon="@Icons.Material.Filled.FitnessCenter" Size="Size.Small" Color="Color.Tertiary" />
+                                    <MudText Typo="Typo.body2" Color="Color.Tertiary">@CalculateTotalVolume(session).ToString("N0") kg</MudText>
+                                </MudStack>
                             </CardHeaderContent>
                             <CardHeaderActions>
                                 <MudTooltip Text="View session details">
@@ -110,6 +114,11 @@
 
             Sessions.Remove(entity);
         }
+    }
+
+    private double CalculateTotalVolume(GymSessionEntity session)
+    {
+        return session.Exercises.Sum(exercise => exercise.Sets.Sum(set => set.CleanRepetitions * set.UsedWeight));
     }
 
     public void OpenDetails(GymSessionEntity session)
