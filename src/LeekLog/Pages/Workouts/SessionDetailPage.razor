@@ -42,7 +42,10 @@
                 <MudItem xs="12" sm="6" md="4">
                     <MudCard Class="mud-height-full">
                         <MudCardHeader>
-                            <MudText Typo="Typo.h6" Color="Color.Tertiary">@exercise.Exercise.Title</MudText>
+                            <MudStack>
+                                <MudText Typo="Typo.h6" Color="Color.Tertiary">@exercise.Exercise.Title</MudText>
+                                <MudText Typo="Typo.body1" Color="Color.Tertiary">Volume: @CalculateTotalVolume(exercise).ToString("N0") kg</MudText>
+                            </MudStack>
                         </MudCardHeader>
                         <MudCardContent>
                             @foreach (WorkoutSetEntity workoutSet in exercise.Sets.OrderBy(o => o.Order))
@@ -102,6 +105,11 @@
 
     private double CalculateTotalVolume(GymSessionEntity session)
     {
-        return session.Exercises.Sum(exercise => exercise.Sets.Sum(set => set.CleanRepetitions * set.UsedWeight));
+        return session.Exercises.Sum(exercise => CalculateTotalVolume(exercise));
+    }
+
+    private double CalculateTotalVolume(SessionExerciseEntity exercise)
+    {
+        return exercise.Sets.Sum(set => set.CleanRepetitions * set.UsedWeight);
     }
 }
