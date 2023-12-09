@@ -31,6 +31,10 @@
                         <MudText Typo="Typo.subtitle1">Avg. heart rate: @Session.AverageHeartRate</MudText>
                     </MudStack>
                 }
+                <MudStack Row="true">
+                    <MudIcon Icon="@Icons.Material.Filled.FitnessCenter" />
+                    <MudText Typo="Typo.subtitle1">Total volume: @CalculateTotalVolume(Session).ToString("N0") kg</MudText>
+                </MudStack>
             </MudItem>
 
             @foreach (SessionExerciseEntity exercise in Session.Exercises.OrderBy(o => o.Order))
@@ -94,5 +98,10 @@
         string additionalReps = string.Join(" ", additionalRepTexts);
 
         return $"{set.UsedWeight}kg x {set.CleanRepetitions} {additionalReps}".Trim();
+    }
+
+    private double CalculateTotalVolume(GymSessionEntity session)
+    {
+        return session.Exercises.Sum(exercise => exercise.Sets.Sum(set => set.CleanRepetitions * set.UsedWeight));
     }
 }
