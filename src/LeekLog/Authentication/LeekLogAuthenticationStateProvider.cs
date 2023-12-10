@@ -67,7 +67,8 @@ public class LeekLogAuthenticationStateProvider : AuthenticationStateProvider, I
     {
         return new ClaimsIdentity(new[]
         {
-            new Claim(ClaimTypes.Name, user.Id.ToString())
+            new Claim(ClaimTypes.Name, user.Id.ToString()),
+            new Claim(ClaimTypes.Role, user.IsAdmin ? "Admin" : "Normal")
         }, "apiauth_type");
     }
 }
