@@ -1,0 +1,38 @@
+﻿@page "/exercises"
+@inject IExerciseService _exerciseService
+
+<PageTitle>Exercise</PageTitle>
+
+<LeekLoadingOverlay IsLoading="_isLoading">
+    <MudText Typo="Typo.h3">Exercises</MudText>
+
+    <MudGrid>
+        <MudItem xs="12">
+            <MudText Typo="Typo.subtitle1">Select the exercise to edit or create a new one.</MudText>
+        </MudItem>
+
+        <MudItem xs="12">
+            <MudList Clickable="true">
+                @foreach (ExerciseEntity exercise in Exercises)
+                {
+                    <MudListItem Text="@exercise.Title" />
+                }
+            </MudList>
+        </MudItem>
+    </MudGrid>
+</LeekLoadingOverlay>
+
+@code {
+    private bool _isLoading;
+
+    public List<ExerciseEntity> Exercises { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        _isLoading = true;
+
+        Exercises = await _exerciseService.GetAllAsync();
+
+        _isLoading = false;
+    }
+}

@@ -7,12 +7,19 @@
         <Authorized>
             <MudNavLink Href="/sessions" Icon="@Icons.Material.Filled.FitnessCenter" Match="NavLinkMatch.Prefix">Sessions</MudNavLink>
             <MudNavLink Href="/feedback" Icon="@Icons.Material.Filled.Feedback" Match="NavLinkMatch.Prefix">Feedback</MudNavLink>
-            <MudNavLink @onclick="LogoutAsync" Icon="@Icons.Material.Filled.Logout" Match="NavLinkMatch.Prefix">Logout</MudNavLink>
         </Authorized>
         <NotAuthorized>
             <MudNavLink Href="/login" Icon="@Icons.Material.Filled.Login" Match="NavLinkMatch.Prefix">Login</MudNavLink>
             <MudNavLink Href="/register" Icon="@Icons.Material.Filled.AppRegistration" Match="NavLinkMatch.Prefix">Register</MudNavLink>
         </NotAuthorized>
+    </AuthorizeView>
+    <AuthorizeView Roles="Admin">
+        <MudNavGroup Icon="@Icons.Material.Filled.AdminPanelSettings" Title="Admin settings" Expanded="true">
+            <MudNavLink Href="/exercises" Icon="@Icons.Material.Filled.AppRegistration" Match="NavLinkMatch.Prefix">Exercises</MudNavLink>
+        </MudNavGroup>
+    </AuthorizeView>
+    <AuthorizeView>
+        <MudNavLink @onclick="LogoutAsync" Icon="@Icons.Material.Filled.Logout" Match="NavLinkMatch.Prefix">Logout</MudNavLink>
     </AuthorizeView>
 </MudNavMenu>
 
