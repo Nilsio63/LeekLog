@@ -96,6 +96,10 @@
     {
         List<string> additionalRepTexts = new();
 
+        if (set.AssistedRepetitions > 0)
+        {
+            additionalRepTexts.Add($"+{set.AssistedRepetitions} assisted");
+        }
         if (set.UncleanRepetitions > 0)
         {
             additionalRepTexts.Add($"+{set.UncleanRepetitions} unclean");
