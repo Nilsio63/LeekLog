@@ -7,6 +7,9 @@
         <Authorized>
             <MudNavLink Href="/sessions" Icon="@Icons.Material.Filled.FitnessCenter" Match="NavLinkMatch.Prefix">Sessions</MudNavLink>
             <MudNavLink Href="/feedback" Icon="@Icons.Material.Filled.Feedback" Match="NavLinkMatch.Prefix">Feedback</MudNavLink>
+            <MudNavGroup Icon="@Icons.Material.Filled.BarChart" Title="Statistics" Expanded="true">
+                <MudNavLink Href="/stats" Icon="@Icons.Material.Filled.ShowChart">Statistics</MudNavLink>
+            </MudNavGroup>
         </Authorized>
         <NotAuthorized>
             <MudNavLink Href="/login" Icon="@Icons.Material.Filled.Login" Match="NavLinkMatch.Prefix">Login</MudNavLink>

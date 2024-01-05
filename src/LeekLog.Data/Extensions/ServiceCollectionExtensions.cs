@@ -17,6 +17,7 @@ public static class ServiceCollectionExtensions
         services.AddTransient<IDbMigrator, DbMigrator>();
         services.AddTransient<IMetaDataInitializer, MetaDataInitializer>();
         services.AddTransient<IUserStore, UserStore>();
+        services.AddTransient<IExerciseStatisticsStore, ExerciseStatisticsStore>();
         services.AddTransient<IExerciseStore, ExerciseStore>();
         services.AddTransient<IFeedbackStore, FeedbackStore>();
         services.AddTransient<IGymSessionStore, GymSessionStore>();

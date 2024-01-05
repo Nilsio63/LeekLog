@@ -10,7 +10,7 @@ public class SessionExerciseConfiguration : BaseConfiguration<SessionExerciseEnt
     {
         builder.ToTable("SessionExercises");
 
-        builder.HasOne<GymSessionEntity>()
+        builder.HasOne(o => o.Session)
             .WithMany(o => o.Exercises)
             .HasForeignKey(o => o.SessionId)
             .OnDelete(DeleteBehavior.Cascade);

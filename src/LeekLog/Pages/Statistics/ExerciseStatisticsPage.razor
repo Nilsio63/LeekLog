@@ -1,0 +1,83 @@
+﻿@page "/stats"
+@inject IUserAuthService _userAuthService
+@inject IExerciseService _exerciseService
+@inject IExerciseStatisticsService _statisticsService
+
+<PageTitle>Feedback</PageTitle>
+
+<MudText Typo="Typo.h3">Exercise Statistics</MudText>
+
+<LeekLoadingOverlay IsLoading="_isLoading">
+    <MudGrid>
+        <MudItem xs="12">
+            <MudText Typo="Typo.subtitle1">Here you can find statistics for your exercises!</MudText>
+        </MudItem>
+
+        <MudItem xs="12">
+            <MudAutocomplete T="ExerciseEntity" Label="Exercise" ValueChanged="SetStats" Value="_selectedExercise" MaxItems="20"
+                             SearchFunc="Search" ToStringFunc="@(e => e == null ? null : e.Title)" />
+        </MudItem>
+
+        <MudItem xs="12">
+            <MudChart ChartType="ChartType.Line" ChartSeries="@ChartSeries" XAxisLabels="@XAxisLabels.ToArray()" />
+        </MudItem>
+    </MudGrid>
+</LeekLoadingOverlay>
+
+@code {
+    private bool _isLoading = false;
+
+    private ExerciseEntity? _selectedExercise;
+
+    public UserEntity? CurrentUser { get; set; }
+    public List<ExerciseEntity> Exercises { get; set; } = new();
+    public List<ChartSeries> ChartSeries { get; set; } = new();
+    public List<string> XAxisLabels { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        _isLoading = true;
+
+        try
+        {
+            CurrentUser = await _userAuthService.GetCurrentUserAsync();
+
+            Exercises = await _exerciseService.GetAllAsync();
+        }
+        finally
+        {
+            _isLoading = false;
+        }
+    }
+
+    private async Task SetStats(ExerciseEntity? exercise)
+    {
+        _selectedExercise = exercise;
+
+        if (_selectedExercise is not null && CurrentUser is not null)
+        {
+            List<ExerciseStatisticsModel> stats = await _statisticsService.GetAllByExerciseAsync(CurrentUser.Id, _selectedExercise.Id);
+
+            XAxisLabels = stats.Select(o => o.Date.ToShortDateString()).ToList();
+
+            ChartSeries = new List<ChartSeries>
+            {
+                new ChartSeries
+                {
+                    Name = "Max Weight",
+                    Data = stats.Select(o => o.MaxWeight).ToArray()
+                }
+            };
+        }
+    }
+
+    private async Task<IEnumerable<ExerciseEntity>> Search(string value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return Exercises;
+        }
+
+        return await Task.FromResult(Exercises.Where(o => o.Title.Contains(value, StringComparison.OrdinalIgnoreCase)));
+    }
+}
