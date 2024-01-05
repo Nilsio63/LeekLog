@@ -139,7 +139,7 @@
     {
         DialogParameters<ExerciseSelectionDialog> parameters = new() { { o => o.Exercises, AllExercises } };
 
-        IDialogReference dialog = await _dialogService.ShowAsync<ExerciseSelectionDialog>("Select exercise", parameters);
+        IDialogReference dialog = await _dialogService.ShowAsync<ExerciseSelectionDialog>("Select exercise", parameters, new DialogOptions { FullWidth = true });
 
         ExerciseEntity? selectedExercise = await dialog.GetReturnValueAsync<ExerciseEntity?>();
 
