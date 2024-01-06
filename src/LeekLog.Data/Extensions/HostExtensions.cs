@@ -13,8 +13,8 @@ public static class HostExtensions
 
         await dbMigrator.MigrateAsync();
 
-        IMetaDataInitializer metaDataInitializer = scope.ServiceProvider.GetRequiredService<IMetaDataInitializer>();
+        //IMetaDataInitializer metaDataInitializer = scope.ServiceProvider.GetRequiredService<IMetaDataInitializer>();
 
-        await metaDataInitializer.InitMetaDataAsync();
+        //await metaDataInitializer.InitMetaDataAsync();
     }
 }
