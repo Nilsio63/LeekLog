@@ -1,0 +1,33 @@
+﻿@inject NavigationManager _navManager
+@inject IExerciseService _exerciseService
+
+@if (Exercise is not null)
+{
+    <MudForm Model="Exercise">
+        <MudCard>
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudTextField Label="Title" @bind-Value="Exercise.Title" />
+                </CardHeaderContent>
+                <CardHeaderActions>
+                    <MudIconButton Icon="@Icons.Material.Filled.Save" Color="Color.Secondary" OnClick="() => SaveAsync(Exercise)" />
+                </CardHeaderActions>
+            </MudCardHeader>
+            <MudCardContent>
+                <MudTextField Label="Description" Lines="5" @bind-Value="Exercise.Description" />
+            </MudCardContent>
+        </MudCard>
+    </MudForm>
+}
+
+@code {
+    [Parameter]
+    public ExerciseEntity? Exercise { get; set; }
+
+    public async Task SaveAsync(ExerciseEntity exercise)
+    {
+        await _exerciseService.SaveAsync(exercise);
+
+        _navManager.NavigateTo("/exercises");
+    }
+}

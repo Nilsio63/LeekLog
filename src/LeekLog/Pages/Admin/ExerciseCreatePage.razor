@@ -1,0 +1,19 @@
+﻿@page "/exercises/new"
+
+<PageTitle>New Exercise</PageTitle>
+
+<MudText Typo="Typo.h3">Create New Exercise</MudText>
+
+<MudGrid>
+    <MudItem xs="12">
+        <MudText Typo="Typo.subtitle1">Create a new exercise.</MudText>
+    </MudItem>
+
+    <MudItem xs="12">
+        <ExerciseEditComponent Exercise="Exercise" />
+    </MudItem>
+</MudGrid>
+
+@code {
+    public ExerciseEntity Exercise { get; set; } = new();
+}

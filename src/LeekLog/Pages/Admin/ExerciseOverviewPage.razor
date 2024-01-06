@@ -1,4 +1,5 @@
 ﻿@page "/exercises"
+@inject NavigationManager _navManager
 @inject IExerciseService _exerciseService
 
 <PageTitle>Exercise</PageTitle>
@@ -19,6 +20,10 @@
                 }
             </MudList>
         </MudItem>
+
+        <MudItem xs="12">
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="OpenNewExercise">New</MudButton>
+        </MudItem>
     </MudGrid>
 </LeekLoadingOverlay>
 
@@ -34,5 +39,10 @@
         Exercises = await _exerciseService.GetAllAsync();
 
         _isLoading = false;
+    }
+
+    private void OpenNewExercise()
+    {
+        _navManager.NavigateTo("exercises/new");
     }
 }

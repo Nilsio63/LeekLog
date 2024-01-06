@@ -17,4 +17,9 @@ public class ExerciseService : IExerciseService
     {
         return await _exerciseStore.GetAllAsync(ct);
     }
+
+    public async Task SaveAsync(ExerciseEntity exercise, CancellationToken ct = default)
+    {
+        await _exerciseStore.SaveAsync(exercise, ct);
+    }
 }
