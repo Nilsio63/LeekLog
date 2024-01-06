@@ -14,7 +14,7 @@
 
         <MudItem xs="12">
             <MudList Clickable="true">
-                @foreach (ExerciseEntity exercise in Exercises)
+                @foreach (ExerciseEntity exercise in Exercises.OrderBy(o => o.Title))
                 {
                     <MudListItem Text="@exercise.Title" OnClick="() => OpenEditExercise(exercise)" />
                 }
