@@ -16,7 +16,7 @@
             <MudList Clickable="true">
                 @foreach (ExerciseEntity exercise in Exercises)
                 {
-                    <MudListItem Text="@exercise.Title" />
+                    <MudListItem Text="@exercise.Title" OnClick="() => OpenEditExercise(exercise)" />
                 }
             </MudList>
         </MudItem>
@@ -39,6 +39,11 @@
         Exercises = await _exerciseService.GetAllAsync();
 
         _isLoading = false;
+    }
+
+    private void OpenEditExercise(ExerciseEntity exercise)
+    {
+        _navManager.NavigateTo($"exercises/edit/{exercise.Id}");
     }
 
     private void OpenNewExercise()

@@ -1,0 +1,36 @@
+﻿@page "/exercises/edit/{ExerciseId}"
+@inject IExerciseService _exerciseService
+
+<PageTitle>Edit Exercise</PageTitle>
+
+<MudText Typo="Typo.h3">Edit Exercise</MudText>
+
+<LeekLoadingOverlay IsLoading="_isLoading">
+    <MudGrid>
+        <MudItem xs="12">
+            <MudText Typo="Typo.subtitle1">Edit your exercise.</MudText>
+        </MudItem>
+
+        <MudItem xs="12">
+            <ExerciseEditComponent Exercise="Exercise" />
+        </MudItem>
+    </MudGrid>
+</LeekLoadingOverlay>
+
+@code {
+    private bool _isLoading = false;
+
+    public ExerciseEntity? Exercise { get; set; }
+
+    [Parameter]
+    public string ExerciseId { get; set; } = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _isLoading = true;
+
+        Exercise = await _exerciseService.GetByIdAsync(ExerciseId);
+
+        _isLoading = false;
+    }
+}

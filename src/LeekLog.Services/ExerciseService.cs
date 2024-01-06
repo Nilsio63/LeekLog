@@ -13,6 +13,11 @@ public class ExerciseService : IExerciseService
         _exerciseStore = exerciseStore;
     }
 
+    public async Task<ExerciseEntity?> GetByIdAsync(string id, CancellationToken ct = default)
+    {
+        return await _exerciseStore.GetByIdAsync(id, ct);
+    }
+
     public async Task<List<ExerciseEntity>> GetAllAsync(CancellationToken ct = default)
     {
         return await _exerciseStore.GetAllAsync(ct);
