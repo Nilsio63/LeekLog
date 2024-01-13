@@ -102,7 +102,7 @@
             ExerciseStatisticDisplayMode.Repetitions => sets.Select(o => (double)o.CleanRepetitions).ToArray(),
             ExerciseStatisticDisplayMode.Weight => sets.Select(o => o.UsedWeight).ToArray(),
             ExerciseStatisticDisplayMode.Volume => sets.Select(o => o.CleanRepetitions * o.UsedWeight).ToArray(),
-            _ => throw new Exception()
+            _ => throw new NotSupportedException($"Display mode '{_selectedDisplayMode}' is not supported")
         };
     }
 
