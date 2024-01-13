@@ -21,6 +21,7 @@ public static class ServiceCollectionExtensions
         services.AddTransient<IExerciseStatisticsService, ExerciseStatisticsService>();
         services.AddTransient<IFeedbackService, FeedbackService>();
         services.AddTransient<IGymSessionService, GymSessionService>();
+        services.AddTransient<ISessionExerciseService, SessionExerciseService>();
 
         services.AddTransient<IValidator<UserCreateModel>, UserCreateModelValidator>();
 

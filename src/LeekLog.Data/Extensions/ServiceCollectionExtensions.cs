@@ -21,6 +21,7 @@ public static class ServiceCollectionExtensions
         services.AddTransient<IExerciseStore, ExerciseStore>();
         services.AddTransient<IFeedbackStore, FeedbackStore>();
         services.AddTransient<IGymSessionStore, GymSessionStore>();
+        services.AddTransient<ISessionExerciseStore, SessionExerciseStore>();
 
         return services;
     }
