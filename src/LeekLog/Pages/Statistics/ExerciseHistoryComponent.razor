@@ -13,9 +13,17 @@
             <MudText Typo="Typo.subtitle1">Check out your exercise history here!</MudText>
         </MudItem>
 
-        <MudItem xs="12">
+        <MudItem xs="12" md="6">
             <MudAutocomplete T="ExerciseEntity" Label="Exercise" ValueChanged="SetStats" Value="_selectedExercise" MaxItems="20"
                              SearchFunc="Search" ToStringFunc="@(e => e == null ? null : e.Title)" />
+        </MudItem>
+
+        <MudItem xs="12" md="6">
+            <MudToggleGroup T="ExerciseStatisticDisplayMode" @bind-Value="_selectedDisplayMode">
+                <MudToggleItem Value="ExerciseStatisticDisplayMode.Repetitions" />
+                <MudToggleItem Value="ExerciseStatisticDisplayMode.Weight" />
+                <MudToggleItem Value="ExerciseStatisticDisplayMode.Volume" />
+            </MudToggleGroup>
         </MudItem>
 
         <MudItem xs="12">
@@ -34,6 +42,7 @@
 @code {
     private bool _isLoading = false;
 
+    private ExerciseStatisticDisplayMode _selectedDisplayMode = ExerciseStatisticDisplayMode.Weight;
     private ExerciseEntity? _selectedExercise;
 
     public UserEntity? CurrentUser { get; set; }
@@ -70,7 +79,7 @@
     {
         return sessionExercise.Sets
             .OrderBy(o => o.Order)
-            .Select(o => o.Order.ToString())
+            .Select(o => $"{o.CleanRepetitions}x{o.UsedWeight}kg")
             .ToArray();
     }
 
@@ -80,9 +89,20 @@
         {
             new ChartSeries
             {
-                Name = "Repetitions",
-                Data = sessionExercise.Sets.OrderBy(o => o.Order).Select(o => (double)o.CleanRepetitions).ToArray()
+                Name = _selectedDisplayMode.ToString(),
+                Data = GetChartData(sessionExercise.Sets.OrderBy(o => o.Order))
             }
+        };
+    }
+
+    private double[] GetChartData(IEnumerable<WorkoutSetEntity> sets)
+    {
+        return _selectedDisplayMode switch
+        {
+            ExerciseStatisticDisplayMode.Repetitions => sets.Select(o => (double)o.CleanRepetitions).ToArray(),
+            ExerciseStatisticDisplayMode.Weight => sets.Select(o => o.UsedWeight).ToArray(),
+            ExerciseStatisticDisplayMode.Volume => sets.Select(o => o.CleanRepetitions * o.UsedWeight).ToArray(),
+            _ => throw new Exception()
         };
     }
 
@@ -90,9 +110,9 @@
     {
         if (string.IsNullOrWhiteSpace(value))
         {
-            return Exercises;
+            return Exercises.OrderBy(o => o.Title);
         }
 
-        return await Task.FromResult(Exercises.Where(o => o.Title.Contains(value, StringComparison.OrdinalIgnoreCase)));
+        return await Task.FromResult(Exercises.Where(o => o.Title.Contains(value, StringComparison.OrdinalIgnoreCase)).OrderBy(o => o.Title));
     }
 }
