@@ -1,4 +1,6 @@
-﻿<MudDialog DisableSidePadding="true">
+﻿@inject IExerciseService _exerciseService
+
+<MudDialog DisableSidePadding="true">
     <DialogContent>
         <MudContainer>
             <MudAutocomplete T="ExerciseEntity" Label="Exercise" @bind-Value="_selectedExercise" MaxItems="20"
@@ -24,11 +26,6 @@
 
     private async Task<IEnumerable<ExerciseEntity>> Search(string value)
     {
-        if (string.IsNullOrWhiteSpace(value))
-        {
-            return Exercises;
-        }
-
-        return await Task.FromResult(Exercises.Where(o => o.Title.Contains(value, StringComparison.OrdinalIgnoreCase)));
+        return await _exerciseService.SearchAsync(value, Exercises);
     }
 }

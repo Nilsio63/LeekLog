@@ -23,6 +23,18 @@ public class ExerciseService : IExerciseService
         return await _exerciseStore.GetAllAsync(ct);
     }
 
+    public async Task<IEnumerable<ExerciseEntity>> SearchAsync(string searchText, IEnumerable<ExerciseEntity>? searchList = null, CancellationToken ct = default)
+    {
+        searchList ??= await GetAllAsync(ct);
+
+        if (string.IsNullOrEmpty(searchText))
+        {
+            return searchList.ToList();
+        }
+
+        return searchList.Where(o => o.Title.Contains(searchText, StringComparison.OrdinalIgnoreCase));
+    }
+
     public async Task SaveAsync(ExerciseEntity exercise, CancellationToken ct = default)
     {
         await _exerciseStore.SaveAsync(exercise, ct);
