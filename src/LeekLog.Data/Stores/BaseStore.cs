@@ -13,7 +13,7 @@ public abstract class BaseStore<T> : IBaseStore<T> where T : BaseEntity
         _dbContextFactory = dbContextFactory;
     }
 
-    public async Task<List<T>> GetAllAsync(CancellationToken ct = default)
+    public virtual async Task<List<T>> GetAllAsync(CancellationToken ct = default)
     {
         using LeekLogDbContext context = await _dbContextFactory.CreateDbContextAsync(ct);
 
