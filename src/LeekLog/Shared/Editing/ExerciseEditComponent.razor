@@ -22,9 +22,9 @@
 
 @code {
     [Parameter]
-    public ExerciseEntity? Exercise { get; set; }
+    public ExerciseEditModel? Exercise { get; set; }
 
-    public async Task SaveAsync(ExerciseEntity exercise)
+    public async Task SaveAsync(ExerciseEditModel exercise)
     {
         await _exerciseService.SaveAsync(exercise);
 

@@ -11,6 +11,16 @@ public class ExerciseTagStore : BaseStore<ExerciseTagEntity>, IExerciseTagStore
     {
     }
 
+    public async Task<List<ExerciseTagEntity>> GetAllByExerciseIdAsync(Guid exerciseId, CancellationToken ct = default)
+    {
+        using LeekLogDbContext context = await _dbContextFactory.CreateDbContextAsync(ct);
+
+        return await context
+            .Set<ExerciseTagEntity>()
+            .Where(o => o.ExerciseId == exerciseId)
+            .ToListAsync(ct);
+    }
+
     public async Task<List<ExerciseTagEntity>> GetAllByTagIdsAsync(IEnumerable<Guid> tagIds, CancellationToken ct = default)
     {
         tagIds = tagIds.Distinct().ToArray();

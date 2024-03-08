@@ -20,7 +20,7 @@
 @code {
     private bool _isLoading = false;
 
-    public ExerciseEntity? Exercise { get; set; }
+    public ExerciseEditModel? Exercise { get; set; }
 
     [Parameter]
     public string ExerciseId { get; set; } = string.Empty;
@@ -29,7 +29,17 @@
     {
         _isLoading = true;
 
-        Exercise = await _exerciseService.GetByIdAsync(ExerciseId);
+        ExerciseEntity? exerciseEntity = await _exerciseService.GetByIdAsync(ExerciseId);
+
+        if (exerciseEntity is not null)
+        {
+            Exercise = new ExerciseEditModel
+                {
+                    ExerciseId = exerciseEntity.Id,
+                    Title = exerciseEntity.Title,
+                    Description = exerciseEntity.Description
+                };
+        }
 
         _isLoading = false;
     }
