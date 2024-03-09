@@ -37,7 +37,8 @@
                 {
                     ExerciseId = exerciseEntity.Id,
                     Title = exerciseEntity.Title,
-                    Description = exerciseEntity.Description
+                    Description = exerciseEntity.Description,
+                    Tags = exerciseEntity.ExerciseTags.Select(o => o.Tag.Title).ToList()
                 };
         }
 

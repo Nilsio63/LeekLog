@@ -14,7 +14,29 @@
                 </CardHeaderActions>
             </MudCardHeader>
             <MudCardContent>
-                <MudTextField Label="Description" Lines="5" @bind-Value="Exercise.Description" />
+                <MudGrid>
+                    <MudItem xs="12" md="8">
+                        <MudPaper Elevation="4" Class="pa-4">
+                            <MudTextField Variant="Variant.Outlined" Label="Description" Lines="5" @bind-Value="Exercise.Description" />
+                        </MudPaper>
+                    </MudItem>
+
+                    <MudItem xs="12" md="4">
+                        <MudPaper Elevation="4" Class="pa-4">
+                            <MudStack Row="true">
+                                <MudTextField Variant="Variant.Outlined" Immediate="true" TextUpdateSuppression="false" OnKeyDown="OnKeyDown" @bind-Value="NewTagTitle" Label="Add tag" />
+                                <MudIconButton Icon="@Icons.Material.Filled.AddCircle" OnClick="AddTag" />
+                            </MudStack>
+
+                            <MudChipSet AllClosable="true" OnClose="RemoveTag">
+                                @foreach (string tag in Exercise.Tags)
+                                {
+                                    <MudChip Text="@tag" Color="Color.Info" />
+                                }
+                            </MudChipSet>
+                        </MudPaper>
+                    </MudItem>
+                </MudGrid>
             </MudCardContent>
         </MudCard>
     </MudForm>
@@ -24,10 +46,39 @@
     [Parameter]
     public ExerciseEditModel? Exercise { get; set; }
 
+    private string NewTagTitle { get; set; } = string.Empty;
+
     public async Task SaveAsync(ExerciseEditModel exercise)
     {
         await _exerciseService.SaveAsync(exercise);
 
         _navManager.NavigateTo("/exercises");
+    }
+
+    private void OnKeyDown(KeyboardEventArgs eventArgs)
+    {
+        if (eventArgs.Code.Equals("Enter", StringComparison.OrdinalIgnoreCase))
+        {
+            AddTag();
+        }
+    }
+
+    private void AddTag()
+    {
+        NewTagTitle = NewTagTitle.Trim();
+
+        if (Exercise is not null
+            && string.IsNullOrWhiteSpace(NewTagTitle) == false
+            && Exercise.Tags.Contains(NewTagTitle) == false)
+        {
+            Exercise.Tags.Add(NewTagTitle);
+
+            NewTagTitle = string.Empty;
+        }
+    }
+
+    private void RemoveTag(MudChip chip)
+    {
+        Exercise?.Tags.Remove(chip.Text);
     }
 }
