@@ -73,11 +73,6 @@
 
     private async Task<IEnumerable<ExerciseEntity>> Search(string value)
     {
-        if (string.IsNullOrWhiteSpace(value))
-        {
-            return Exercises;
-        }
-
-        return await Task.FromResult(Exercises.Where(o => o.Title.Contains(value, StringComparison.OrdinalIgnoreCase)));
+        return await _exerciseService.SearchAsync(value, Exercises);
     }
 }
