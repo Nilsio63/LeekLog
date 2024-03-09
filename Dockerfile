@@ -14,7 +14,7 @@ WORKDIR /app
 COPY --from=build-env /app/out .
 
 # Expose the port your Blazor app will run on
-EXPOSE 80
+EXPOSE 8080
 
 # Start the Blazor app
 ENTRYPOINT ["dotnet", "LeekLog.dll"]
