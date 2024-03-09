@@ -40,7 +40,39 @@ public class ExerciseService : IExerciseService
             return searchList.ToList();
         }
 
-        return searchList.Where(o => o.Title.Contains(searchText, StringComparison.OrdinalIgnoreCase));
+        string[] searchWords = GetWords(searchText);
+
+        return searchList
+            .Select(o =>
+            {
+                string[] titleWords = GetWords(o.Title, o.ExerciseTags.Select(o => o.Tag.Title));
+
+                int searchHitValue = searchWords.Intersect(titleWords, StringComparer.OrdinalIgnoreCase).Count();
+
+                return new
+                {
+                    FullMatch = searchText.Equals(o.Title, StringComparison.OrdinalIgnoreCase),
+                    SearchHitValue = searchHitValue,
+                    Exercise = o
+                };
+            })
+            .OrderByDescending(o => o.FullMatch)
+            .ThenByDescending(o => o.SearchHitValue)
+            .Select(o => o.Exercise);
+    }
+
+    private static string[] GetWords(string text, IEnumerable<string>? additionalWords = null)
+    {
+        IEnumerable<string> wordsFromText = text.Split(new char[] { ' ', '-', '(', ')' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+        if (additionalWords is not null)
+        {
+            wordsFromText = wordsFromText.Concat(additionalWords);
+        }
+
+        return wordsFromText
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToArray();
     }
 
     public async Task SaveAsync(ExerciseEditModel exerciseEditModel, CancellationToken ct = default)
