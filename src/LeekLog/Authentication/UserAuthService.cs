@@ -32,14 +32,14 @@ public class UserAuthService : IUserAuthService
 
     public async Task<bool> IsUserLoggedInAsync(CancellationToken ct = default)
     {
-        string userId = await _localStorageService.GetItemAsync<string>(AuthConstants.LocalStorageUserIdKey, ct);
+        string? userId = await _localStorageService.GetItemAsync<string>(AuthConstants.LocalStorageUserIdKey, ct);
 
         return !string.IsNullOrWhiteSpace(userId);
     }
 
     public async Task<UserEntity?> GetCurrentUserAsync(CancellationToken ct = default)
     {
-        string userId = await _localStorageService.GetItemAsync<string>(AuthConstants.LocalStorageUserIdKey, ct);
+        string? userId = await _localStorageService.GetItemAsync<string>(AuthConstants.LocalStorageUserIdKey, ct);
 
         if (string.IsNullOrWhiteSpace(userId))
         {

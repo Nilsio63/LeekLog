@@ -28,9 +28,9 @@ public class LeekLogAuthenticationStateProvider : AuthenticationStateProvider, I
 
     public override async Task<AuthenticationState> GetAuthenticationStateAsync()
     {
-        string userId = await _localStorageService.GetItemAsync<string>(AuthConstants.LocalStorageUserIdKey);
+        string? userId = await _localStorageService.GetItemAsync<string>(AuthConstants.LocalStorageUserIdKey);
 
-        UserEntity? user = await _userStore.GetByIdAsync(userId);
+        UserEntity? user = string.IsNullOrWhiteSpace(userId) ? null : await _userStore.GetByIdAsync(userId);
 
         ClaimsIdentity claimsIdentity = user != null
             ? GetClaimsIdentity(user)
