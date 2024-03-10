@@ -37,7 +37,7 @@ public class ExerciseService : IExerciseService
 
         if (string.IsNullOrEmpty(searchText))
         {
-            return searchList.ToList();
+            return searchList.OrderBy(o => o.Title);
         }
 
         string[] searchWords = GetWords(searchText);
@@ -49,6 +49,11 @@ public class ExerciseService : IExerciseService
 
                 int searchHitValue = searchWords.Intersect(titleWords, StringComparer.OrdinalIgnoreCase).Count();
 
+                if (o.Title.Contains(searchText, StringComparison.OrdinalIgnoreCase))
+                {
+                    searchHitValue++;
+                }
+
                 return new
                 {
                     FullMatch = searchText.Equals(o.Title, StringComparison.OrdinalIgnoreCase),
@@ -56,8 +61,10 @@ public class ExerciseService : IExerciseService
                     Exercise = o
                 };
             })
+            .Where(o => o.SearchHitValue > 0)
             .OrderByDescending(o => o.FullMatch)
             .ThenByDescending(o => o.SearchHitValue)
+            .ThenBy(o => o.Exercise.Title)
             .Select(o => o.Exercise);
     }
 
