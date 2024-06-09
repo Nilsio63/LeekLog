@@ -1,0 +1,22 @@
+﻿<MudDialog DisableSidePadding="true">
+    <DialogContent>
+        <MudContainer>
+            <MudTextField @bind-Value="_importText" Lines="15" Label="Session Notes" />
+        </MudContainer>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="MudDialog.Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Confirm">Confirm</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    private string _importText = string.Empty;
+
+    [CascadingParameter] public MudDialogInstance MudDialog { get; set; } = null!;
+
+    public void Confirm()
+    {
+        MudDialog.Close(_importText);
+    }
+}
